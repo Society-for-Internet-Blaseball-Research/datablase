@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "API for SIBR statistics.",
   "main": "lib/index.js",
+  "scripts": {
+    "start": "node lib/index.js"
+  },
   "repository": "https://github.com/Society-For-Blaseball-Research/sibr-api",
   "author": "Corvimae",
   "license": "MIT",
