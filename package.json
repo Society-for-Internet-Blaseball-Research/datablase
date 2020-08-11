@@ -1,0 +1,15 @@
+{
+  "name": "sibr-api",
+  "version": "1.0.0",
+  "description": "API for SIBR statistics.",
+  "main": "lib/index.js",
+  "repository": "https://github.com/Society-For-Blaseball-Research/sibr-api",
+  "author": "Corvimae",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-promise-router": "^4.0.1",
+    "express-swagger-generator": "^1.1.17",
+    "pg": "^8.3.0"
+  }
+}
