@@ -1,3 +1,6 @@
+# 1.0.14
+- Move `/events/all` endpoint to `/data/events`.
+
 # 1.0.13
 - Added the `/events/all` endpoint.
 
