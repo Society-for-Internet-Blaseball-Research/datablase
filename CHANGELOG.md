@@ -1,3 +1,6 @@
+# 1.0.13
+- Added the `/events/all` endpoint.
+
 # 1.0.12
 - Added the `/countByType` endpoint.
 - Fixed `count` values returning as strings.
