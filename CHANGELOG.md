@@ -1,7 +1,7 @@
 # 1.0.12
 - Added the `/countByType` endpoint.
 - Fixed `count` values returning as strings.
-- Fixed `home_score` and `away_score` values in the `GameEvent` object returning as string.s
+- Fixed `home_score` and `away_score` values in the `GameEvent` object returning as string.
 
 # 1.0.11
 - Fix `/events` not accepting comma-separated values.
