@@ -1,3 +1,6 @@
+# 1.0.15
+- Add `type`, `sortBy`, and `sortDirection` parameters to `/events`.
+
 # 1.0.14
 - Move `/events/all` endpoint to `/data/events`.
 
