@@ -1,3 +1,6 @@
+# 1.0.16
+- Enable CORS for all domains.
+
 # 1.0.15
 - Add `type`, `sortBy`, and `sortDirection` parameters to `/events`.
 
