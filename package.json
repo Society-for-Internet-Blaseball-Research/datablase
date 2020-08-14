@@ -10,6 +10,7 @@
   "author": "Corvimae",
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-promise-router": "^4.0.1",
     "express-swagger-generator": "^1.1.17",
