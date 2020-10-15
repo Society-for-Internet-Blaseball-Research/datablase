@@ -4,6 +4,7 @@
   "description": "API for SIBR statistics.",
   "main": "lib/index.js",
   "scripts": {
+    "dev": "nodemon lib/index.js",
     "start": "node lib/index.js"
   },
   "repository": "https://github.com/Society-For-Blaseball-Research/sibr-api",
@@ -20,6 +21,7 @@
   "devDependencies": {
     "husky": ">=4",
     "lint-staged": ">=10",
+    "nodemon": "^2.0.5",
     "prettier": "^2.1.2"
   },
   "husky": {
