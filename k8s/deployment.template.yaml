@@ -16,36 +16,35 @@ spec:
         app: sibr-datablase
     spec:
       containers:
-      - name: sibr-datablase
-        image: corvimae/datablase:{{IMAGE_VERSION}}
-        ports:
-        - containerPort: 3000
-        env:
-          - name: PGHOST
-            valueFrom:
-              secretKeyRef:
-                name: datablase-secrets
-                key: pgHost
-          - name: PGPORT
-            valueFrom:
-              secretKeyRef:
-                name: datablase-secrets
-                key: pgPort
-          - name: PGDATABASE
-            valueFrom:
-              secretKeyRef:
-                name: datablase-secrets
-                key: pgDatabase
-          - name: PGUSER
-            valueFrom:
-              secretKeyRef:
-                name: datablase-secrets
-                key: pgUser
-          - name: PGPASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: datablase-secrets
-                key: pgPassword
-          - name: SIBR_PRODUCTION
-            value: "1"
-            
+        - name: sibr-datablase
+          image: corvimae/datablase:{{IMAGE_VERSION}}
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PGHOST
+              valueFrom:
+                secretKeyRef:
+                  name: datablase-secrets
+                  key: pgHost
+            - name: PGPORT
+              valueFrom:
+                secretKeyRef:
+                  name: datablase-secrets
+                  key: pgPort
+            - name: PGDATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: datablase-secrets
+                  key: pgDatabase
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: datablase-secrets
+                  key: pgUser
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: datablase-secrets
+                  key: pgPassword
+            - name: SIBR_PRODUCTION
+              value: '1'
