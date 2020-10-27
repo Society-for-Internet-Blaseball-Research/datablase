@@ -1,0 +1,342 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AppliedPatches {
+  patch_id   Int     @id @default(autoincrement())
+  patch_hash String?
+
+  @@map("applied_patches")
+}
+
+model ChroniclerHashGameEvent {
+  chronicler_hash_game_event_id Int          @id @default(autoincrement())
+  update_hash                   String?
+  game_event_id                 Int?
+  game_events                   GameEvent?   @relation(fields: [game_event_id], references: [id])
+
+  @@index([game_event_id], name: "chronicler_hash_game_event_indx_game_event_id")
+  @@map("chronicler_hash_game_event")
+}
+
+model ChroniclerMeta {
+  id               Int       @id
+  season           Float
+  day              Float
+  game_timestamp   DateTime?
+  team_timestamp   DateTime?
+  player_timestamp DateTime?
+
+  @@map("chronicler_meta")
+}
+
+model GameEventBaseRunner {
+  id                     Int          @id @default(autoincrement())
+  game_event_id          Int?
+  runner_id              String?
+  responsible_pitcher_id String?
+  base_before_play       Int?
+  base_after_play        Int?
+  was_base_stolen        Boolean?
+  was_caught_stealing    Boolean?
+  was_picked_off         Boolean?
+  runner_scored          Boolean?     @default(false)
+  runs_scored            Float?
+  game_events            GameEvent?   @relation(fields: [game_event_id], references: [id])
+
+  @@map("game_event_base_runners")
+}
+
+model GameEvent {
+  id                                 Int                          @id @default(autoincrement())
+  perceived_at                       DateTime?
+  game_id                            String?
+  event_type                         String?
+  event_index                        Int?
+  inning                             Int?
+  top_of_inning                      Boolean?
+  outs_before_play                   Int?
+  batter_id                          String?
+  batter_team_id                     String?
+  pitcher_id                         String?
+  pitcher_team_id                    String?
+  home_score                         Float?
+  away_score                         Float?
+  home_strike_count                  Int?                         @default(dbgenerated())
+  away_strike_count                  Int?                         @default(dbgenerated())
+  batter_count                       Int?
+  pitches                            String[]
+  total_strikes                      Int?
+  total_balls                        Int?
+  total_fouls                        Int?
+  is_leadoff                         Boolean?
+  is_pinch_hit                       Boolean?
+  lineup_position                    Int?
+  is_last_event_for_plate_appearance Boolean?
+  bases_hit                          Int?
+  runs_batted_in                     Int?
+  is_sacrifice_hit                   Boolean?
+  is_sacrifice_fly                   Boolean?
+  outs_on_play                       Int?
+  is_double_play                     Boolean?
+  is_triple_play                     Boolean?
+  is_wild_pitch                      Boolean?
+  batted_ball_type                   String?
+  is_bunt                            Boolean?
+  errors_on_play                     Int?
+  batter_base_after_play             Int?
+  is_last_game_event                 Boolean?
+  event_text                         String[]
+  additional_context                 String?
+  season                             Int?
+  day                                Int?
+  parsing_error                      Boolean?
+  parsing_error_list                 String[]
+  fixed_error                        Boolean?
+  fixed_error_list                   String[]
+  home_ball_count                    Int?                         @default(4)
+  away_ball_count                    Int?                         @default(4)
+  away_base_count                    Int?                         @default(4)
+  home_base_count                    Int?                         @default(4)
+  games                              Game?                       @relation(fields: [game_id], references: [game_id])
+  chronicler_hash_game_event         ChroniclerHashGameEvent[]
+  game_event_base_runners            GameEventBaseRunner[]
+  outcomes                           Outcome[]
+
+  @@unique([game_id, event_index], name: "no_dupes")
+  @@index([event_type], name: "game_events_indx_event_type")
+  @@map("game_events")
+}
+
+model Game {
+  game_id                String        @id
+  day                    Int?
+  season                 Int?
+  last_game_event        Int?
+  home_odds              Float?
+  away_odds              Float?
+  weather                Int?
+  series_index           Int?
+  series_length          Int?
+  is_postseason          Boolean?
+  home_team              String?
+  away_team              String?
+  home_score             Float?
+  away_score             Float?
+  number_of_innings      Int?
+  ended_on_top_of_inning Boolean?
+  ended_in_shame         Boolean?
+  terminology_id         String?
+  rules_id               String?
+  statsheet_id           String?
+  winning_pitcher_id     String?
+  losing_pitcher_id      String?
+  game_events            GameEvent[]
+
+  @@map("games")
+}
+
+model ImportedLog {
+  id          Int       @id @default(autoincrement())
+  key         String?
+  imported_at DateTime?
+
+  @@map("imported_logs")
+}
+
+model Outcome {
+  id            Int          @id @default(autoincrement())
+  game_event_id Int?
+  entity_id     String?
+  event_type    String?
+  original_text String?
+  game_events   GameEvent?   @relation(fields: [game_event_id], references: [id])
+
+  @@map("outcomes")
+}
+
+model PlayerModification {
+  player_modifications_id Int       @id @default(autoincrement())
+  player_id               String?
+  modification            String?
+  valid_from              DateTime?
+  valid_until             DateTime?
+
+  @@map("player_modifications")
+}
+
+model Player {
+  id               Int       @id @default(autoincrement())
+  player_id        String?
+  valid_from       DateTime?
+  valid_until      DateTime?
+  player_name      String?
+  deceased         Boolean?
+  hash             String?
+  anticapitalism   Float?
+  base_thirst      Float?
+  buoyancy         Float?
+  chasiness        Float?
+  coldness         Float?
+  continuation     Float?
+  divinity         Float?
+  ground_friction  Float?
+  indulgence       Float?
+  laserlikeness    Float?
+  martyrdom        Float?
+  moxie            Float?
+  musclitude       Float?
+  omniscience      Float?
+  overpowerment    Float?
+  patheticism      Float?
+  ruthlessness     Float?
+  shakespearianism Float?
+  suppression      Float?
+  tenaciousness    Float?
+  thwackability    Float?
+  tragicness       Float?
+  unthwackability  Float?
+  watchfulness     Float?
+  pressurization   Float?
+  cinnamon         Float?
+  total_fingers    Int?
+  soul             Int?
+  fate             Int?
+  peanut_allergy   Boolean?
+  armor            String?
+  bat              String?
+  ritual           String?
+  coffee           Int?
+  blood            Int?
+  url_slug         String?
+
+  @@map("players")
+}
+
+model TeamModification {
+  team_modifications_id Int       @id @default(autoincrement())
+  team_id               String?
+  modification          String?
+  valid_from            DateTime?
+  valid_until           DateTime?
+
+  @@map("team_modifications")
+}
+
+model TeamRoster {
+  team_roster_id   Int       @id @default(autoincrement())
+  team_id          String?
+  position_id      Int?
+  valid_from       DateTime?
+  valid_until      DateTime?
+  player_id        String?
+  position_type_id Float?
+
+  @@index([valid_until, team_id, position_id, position_type_id], name: "team_roster_idx")
+  @@map("team_roster")
+}
+
+model Team {
+  id          Int       @id @default(autoincrement())
+  team_id     String?
+  location    String?
+  nickname    String?
+  full_name   String?
+  valid_from  DateTime?
+  valid_until DateTime?
+  hash        String?
+  url_slug    String?
+  card        Int?
+
+  @@map("teams")
+}
+
+model TimeMap {
+  season          Int
+  day             Int
+  first_time      DateTime?
+  time_map_id     Int       @id @default(autoincrement())
+  time_event_type String?
+
+  @@unique([season, day, time_event_type], name: "season_day_type_unique")
+  @@map("time_map")
+}
+
+// Views
+
+// Player Current View
+model CurrentPlayer {
+  // View-specific types
+  player_url_slug     String?
+  previous_url_slugs  String[]
+  team_id             String?
+  team                String?
+  position_type       String
+  position_id         Int
+
+  // "Inherited" types from Player
+  // - @TODO: Inherit from Player type once support is added to Prisma
+  player_id           String     @id
+  valid_from          DateTime?
+  gameday_from        Int
+  season_from         Int
+  deceased            Boolean?
+  player_name         String?
+  anticapitalism      Float?
+  base_thirst         Float?
+  buoyancy            Float?
+  chasiness           Float?
+  coldness            Float?
+  continuation        Float?
+  divinity            Float?
+  ground_friction     Float?
+  indulgence          Float?
+  laserlikeness       Float?
+  martyrdom           Float?
+  moxie               Float?
+  musclitude          Float?
+  omniscience         Float?
+  overpowerment       Float?
+  patheticism         Float?
+  ruthlessness        Float?
+  shakespearianism    Float?
+  suppression         Float?
+  tenaciousness       Float?
+  thwackability       Float?
+  tragicness          Float?
+  unthwackability     Float?
+  watchfulness        Float?
+  pressurization      Float?
+  cinnamon            Float?
+  total_fingers       Int?
+  soul                Int?
+  fate                Int?
+  peanut_allergy      Boolean?
+  armor               String?
+  bat                 String?
+  ritual              String?
+  coffee              String?
+  blood               String?
+
+  @@map("players_current")
+}
+
+// Team Roster Current View
+model CurrentTeamRoster {
+  player_id       String     @id
+  team_id         String
+  valid_from      DateTime
+  gameday_from    Int
+  season_from     Int
+  nickname        String
+  player_name     String
+  position_type   String
+  position_id     Int
+
+  @@map("rosters_current")
+}
