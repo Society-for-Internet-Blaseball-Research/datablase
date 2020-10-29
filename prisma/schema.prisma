@@ -103,7 +103,7 @@ model GameEvent {
   away_ball_count                    Int?                         @default(4)
   away_base_count                    Int?                         @default(4)
   home_base_count                    Int?                         @default(4)
-  games                              Game?                       @relation(fields: [game_id], references: [game_id])
+  games                              Game?                        @relation(fields: [game_id], references: [game_id])
   chronicler_hash_game_event         ChroniclerHashGameEvent[]
   game_event_base_runners            GameEventBaseRunner[]
   outcomes                           Outcome[]
@@ -115,8 +115,8 @@ model GameEvent {
 
 model Game {
   game_id                String        @id
-  day                    Int?
-  season                 Int?
+  day                    Int
+  season                 Int
   last_game_event        Int?
   home_odds              Float?
   away_odds              Float?
@@ -170,54 +170,6 @@ model PlayerModification {
   @@map("player_modifications")
 }
 
-model Player {
-  id               Int       @id @default(autoincrement())
-  player_id        String?
-  valid_from       DateTime?
-  valid_until      DateTime?
-  player_name      String?
-  deceased         Boolean?
-  hash             String?
-  anticapitalism   Float?
-  base_thirst      Float?
-  buoyancy         Float?
-  chasiness        Float?
-  coldness         Float?
-  continuation     Float?
-  divinity         Float?
-  ground_friction  Float?
-  indulgence       Float?
-  laserlikeness    Float?
-  martyrdom        Float?
-  moxie            Float?
-  musclitude       Float?
-  omniscience      Float?
-  overpowerment    Float?
-  patheticism      Float?
-  ruthlessness     Float?
-  shakespearianism Float?
-  suppression      Float?
-  tenaciousness    Float?
-  thwackability    Float?
-  tragicness       Float?
-  unthwackability  Float?
-  watchfulness     Float?
-  pressurization   Float?
-  cinnamon         Float?
-  total_fingers    Int?
-  soul             Int?
-  fate             Int?
-  peanut_allergy   Boolean?
-  armor            String?
-  bat              String?
-  ritual           String?
-  coffee           Int?
-  blood            Int?
-  url_slug         String?
-
-  @@map("players")
-}
-
 model TeamModification {
   team_modifications_id Int       @id @default(autoincrement())
   team_id               String?
@@ -241,25 +193,10 @@ model TeamRoster {
   @@map("team_roster")
 }
 
-model Team {
-  id          Int       @id @default(autoincrement())
-  team_id     String?
-  location    String?
-  nickname    String?
-  full_name   String?
-  valid_from  DateTime?
-  valid_until DateTime?
-  hash        String?
-  url_slug    String?
-  card        Int?
-
-  @@map("teams")
-}
-
 model TimeMap {
   season          Int
   day             Int
-  first_time      DateTime?
+  first_time      DateTime
   time_map_id     Int       @id @default(autoincrement())
   time_event_type String?
 
@@ -269,20 +206,17 @@ model TimeMap {
 
 // Views
 
-// Player Current View
-model CurrentPlayer {
-  // View-specific types
-  player_url_slug     String?
-  previous_url_slugs  String[]
+model Player {
+  player_id           String
+  url_slug            String?
   team_id             String?
   team                String?
-  position_type       String
-  position_id         Int
-
-  // "Inherited" types from Player
-  // - @TODO: Inherit from Player type once support is added to Prisma
-  player_id           String     @id
-  valid_from          DateTime?
+  current_state       String?
+  current_location    String?
+  position_type       String?
+  position_id         Int?
+  valid_from          DateTime
+  valid_until         DateTime?
   gameday_from        Int
   season_from         Int
   deceased            Boolean?
@@ -323,10 +257,30 @@ model CurrentPlayer {
   coffee              String?
   blood               String?
 
-  @@map("players_current")
+  @@id(fields: [player_id, valid_from])
+  @@map("players_info_expanded_all")
 }
 
-// Team Roster Current View
+model Team {
+  team_id         String
+  location        String
+  nickname        String
+  full_name       String
+  url_slug        String
+  valid_from      DateTime
+  valid_until     DateTime?
+  gameday_from    Int
+  season_from     Int
+  division        String?
+  division_id     String?
+  league          String?
+  league_id       String?
+
+  @@id(fields: [team_id, valid_from])
+  @@map("teams_info_expanded_all")
+}
+
+// Current Team Roster View
 model CurrentTeamRoster {
   player_id       String     @id
   team_id         String
