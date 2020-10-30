@@ -1,9 +1,10 @@
 {
   "name": "sibr-api",
-  "version": "1.3.1",
+  "version": "1.3.5",
   "description": "API for SIBR statistics.",
   "main": "lib/index.js",
   "scripts": {
+    "dev": "nodemon lib/index.js",
     "start": "node lib/index.js"
   },
   "repository": "https://github.com/Society-For-Blaseball-Research/sibr-api",
@@ -16,5 +17,19 @@
     "express-promise-router": "^4.0.1",
     "express-swagger-generator": "^1.1.17",
     "pg": "^8.3.3"
+  },
+  "devDependencies": {
+    "husky": ">=4",
+    "lint-staged": ">=10",
+    "nodemon": "^2.0.5",
+    "prettier": "^2.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
   }
 }
