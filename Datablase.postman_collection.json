@@ -1,8 +1,8 @@
 {
 	"info": {
 		"_postman_id": "12c1a47a-da12-43b4-bd17-a6a69d2fc12d",
-		"name": "Datablase",
-		"description": "The SIBR public statistics API.",
+		"name": "Datablase Tests",
+		"description": "Automated testing for the Datablase API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -11,11 +11,30 @@
 			"item": [
 				{
 					"name": "Query for game events.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1117c5fa-7d55-476d-b8b4-b3335ef8b542",
+								"exec": [
+									"pm.test(\"Conner hits dingers\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.count).greaterThan(180);\r",
+									"    pm.expect(jsonData.results.length).equals(jsonData.count);\r",
+									"    pm.variables.set(\"conner_dingers\", jsonData.count);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/events?playerId=<string>&gameId=<string>&pitcherId=<string>&batterId=<string>&type=<string>&outcomes=<boolean>&baseRunners=<boolean>&sortBy=<string>&sortDirection=<string>",
+							"raw": "{{baseUrl}}/events?batterId=740d5fef-d59f-4dac-9a75-739ec07f91cf&type=HOME_RUN",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -26,47 +45,54 @@
 								{
 									"key": "playerId",
 									"value": "<string>",
-									"description": "The ID of a player that must be the batter or the pitcher in each event."
+									"description": "The ID of a player that must be the batter or the pitcher in each event.",
+									"disabled": true
 								},
 								{
 									"key": "gameId",
 									"value": "<string>",
-									"description": "The ID of the game by which to filter results."
+									"description": "The ID of the game by which to filter results.",
+									"disabled": true
 								},
 								{
 									"key": "pitcherId",
 									"value": "<string>",
-									"description": "The ID of the pitcher that must be in each event."
+									"description": "The ID of the pitcher that must be in each event.",
+									"disabled": true
 								},
 								{
 									"key": "batterId",
-									"value": "<string>",
+									"value": "740d5fef-d59f-4dac-9a75-739ec07f91cf",
 									"description": "The ID of the batter that must be in each event."
 								},
 								{
 									"key": "type",
-									"value": "<string>",
+									"value": "HOME_RUN",
 									"description": "The type of event by which to filter."
 								},
 								{
 									"key": "outcomes",
 									"value": "<boolean>",
-									"description": "Include child player event records."
+									"description": "Include child player event records.",
+									"disabled": true
 								},
 								{
 									"key": "baseRunners",
 									"value": "<boolean>",
-									"description": "Include child base runner records."
+									"description": "Include child base runner records.",
+									"disabled": true
 								},
 								{
 									"key": "sortBy",
 									"value": "<string>",
-									"description": "The field by which to sort. Most text and numeric columns are supported."
+									"description": "The field by which to sort. Most text and numeric columns are supported.",
+									"disabled": true
 								},
 								{
 									"key": "sortDirection",
 									"value": "<string>",
-									"description": "The direction by which to sort. Must be one of ASC, DESC."
+									"description": "The direction by which to sort. Must be one of ASC, DESC.",
+									"disabled": true
 								}
 							]
 						},
@@ -142,11 +168,31 @@
 				},
 				{
 					"name": "Calculate the number of events for each batter or pitcher.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "15eece25-9794-478b-bf05-057253a5c4dc",
+								"exec": [
+									"pm.test(\"Same number of dingers\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.batters[0].count === pm.variables.get(\"conner_dingers\"))\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Over 100 pitchers dinged\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.pitchers.length).greaterThan(100);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/countByType?eventType=<string>&batterId=<string>&pitcherId=<string>",
+							"raw": "{{baseUrl}}/countByType?eventType=HOME_RUN&batterId=740d5fef-d59f-4dac-9a75-739ec07f91cf",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -156,18 +202,19 @@
 							"query": [
 								{
 									"key": "eventType",
-									"value": "<string>",
+									"value": "HOME_RUN",
 									"description": "(Required) The type of event to count."
 								},
 								{
 									"key": "batterId",
-									"value": "<string>",
+									"value": "740d5fef-d59f-4dac-9a75-739ec07f91cf",
 									"description": "The ID of the batter(s) by which to filter."
 								},
 								{
 									"key": "pitcherId",
 									"value": "<string>",
-									"description": "The ID of the pitcher(s) by which to filter."
+									"description": "The ID of the pitcher(s) by which to filter.",
+									"disabled": true
 								}
 							]
 						},
@@ -254,8 +301,11 @@
 									"query": [
 										{
 											"key": "playerId",
-											"value": "740d5fef-d59f-4dac-9a75-739ec07f91cf",
-											"description": "The player ID of the player (takes precedence if other params are specified)"
+											"value": "740d5fef-d59f-4dac-9a75-739ec07f91cf"
+										},
+										{
+											"key": "all",
+											"value": "true"
 										},
 										{
 											"key": "name",
@@ -268,11 +318,6 @@
 											"value": "<string>",
 											"description": "The url_slug of the player",
 											"disabled": true
-										},
-										{
-											"key": "all",
-											"value": "true",
-											"description": "(default:false) If true, all historical info for the player will be returned, rather than just the current info"
 										}
 									]
 								},
@@ -1718,7 +1763,7 @@
 	],
 	"variable": [
 		{
-			"id": "1032b4df-111d-493a-a471-d5fc7abaceec",
+			"id": "9eaf2599-66d2-4248-ad9f-ad63981f0189",
 			"key": "baseUrl",
 			"value": "https://api.blaseball-reference.com/v1"
 		}
