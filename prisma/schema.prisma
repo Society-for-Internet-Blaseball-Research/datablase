@@ -15,10 +15,10 @@ model AppliedPatches {
 }
 
 model ChroniclerHashGameEvent {
-  chronicler_hash_game_event_id Int          @id @default(autoincrement())
+  chronicler_hash_game_event_id Int        @id @default(autoincrement())
   update_hash                   String?
   game_event_id                 Int?
-  game_events                   GameEvent?   @relation(fields: [game_event_id], references: [id])
+  game_events                   GameEvent? @relation(fields: [game_event_id], references: [id])
 
   @@index([game_event_id], name: "chronicler_hash_game_event_indx_game_event_id")
   @@map("chronicler_hash_game_event")
@@ -36,7 +36,7 @@ model ChroniclerMeta {
 }
 
 model GameEventBaseRunner {
-  id                     Int          @id @default(autoincrement())
+  id                     Int        @id @default(autoincrement())
   game_event_id          Int?
   runner_id              String?
   responsible_pitcher_id String?
@@ -45,15 +45,15 @@ model GameEventBaseRunner {
   was_base_stolen        Boolean?
   was_caught_stealing    Boolean?
   was_picked_off         Boolean?
-  runner_scored          Boolean?     @default(false)
+  runner_scored          Boolean?   @default(false)
   runs_scored            Float?
-  game_events            GameEvent?   @relation(fields: [game_event_id], references: [id])
+  game_events            GameEvent? @relation(fields: [game_event_id], references: [id])
 
   @@map("game_event_base_runners")
 }
 
 model GameEvent {
-  id                                 Int                          @id @default(autoincrement())
+  id                                 Int                       @id @default(autoincrement())
   perceived_at                       DateTime?
   game_id                            String?
   event_type                         String?
@@ -67,8 +67,8 @@ model GameEvent {
   pitcher_team_id                    String?
   home_score                         Float?
   away_score                         Float?
-  home_strike_count                  Int?                         @default(dbgenerated())
-  away_strike_count                  Int?                         @default(dbgenerated())
+  home_strike_count                  Int?                      @default(3)
+  away_strike_count                  Int?                      @default(3)
   batter_count                       Int?
   pitches                            String[]
   total_strikes                      Int?
@@ -79,7 +79,7 @@ model GameEvent {
   lineup_position                    Int?
   is_last_event_for_plate_appearance Boolean?
   bases_hit                          Int?
-  runs_batted_in                     Int?
+  runs_batted_in                     Float?
   is_sacrifice_hit                   Boolean?
   is_sacrifice_fly                   Boolean?
   outs_on_play                       Int?
@@ -99,24 +99,27 @@ model GameEvent {
   parsing_error_list                 String[]
   fixed_error                        Boolean?
   fixed_error_list                   String[]
-  home_ball_count                    Int?                         @default(4)
-  away_ball_count                    Int?                         @default(4)
-  away_base_count                    Int?                         @default(4)
-  home_base_count                    Int?                         @default(4)
-  games                              Game?                        @relation(fields: [game_id], references: [game_id])
+  home_ball_count                    Int?                      @default(4)
+  away_ball_count                    Int?                      @default(4)
+  away_base_count                    Int?                      @default(4)
+  home_base_count                    Int?                      @default(4)
+  tournament                         Int?
+  games                              Game?                     @relation(fields: [game_id], references: [game_id])
   chronicler_hash_game_event         ChroniclerHashGameEvent[]
   game_event_base_runners            GameEventBaseRunner[]
   outcomes                           Outcome[]
 
   @@unique([game_id, event_index], name: "no_dupes")
   @@index([event_type], name: "game_events_indx_event_type")
+  @@index([game_id], name: "game_events_indx_game_id")
   @@map("game_events")
 }
 
 model Game {
-  game_id                String        @id
+  game_id                String      @id
   day                    Int
   season                 Int
+  tournament             Int
   last_game_event        Int?
   home_odds              Float?
   away_odds              Float?
@@ -150,12 +153,12 @@ model ImportedLog {
 }
 
 model Outcome {
-  id            Int          @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   game_event_id Int?
   entity_id     String?
   event_type    String?
   original_text String?
-  game_events   GameEvent?   @relation(fields: [game_event_id], references: [id])
+  game_events   GameEvent? @relation(fields: [game_event_id], references: [id])
 
   @@map("outcomes")
 }
@@ -167,6 +170,7 @@ model PlayerModification {
   valid_from              DateTime?
   valid_until             DateTime?
 
+  @@index([player_id, valid_from, valid_until], name: "player_modifications_indx_player_id_timespan")
   @@map("player_modifications")
 }
 
@@ -190,104 +194,121 @@ model TeamRoster {
   position_type_id Float?
 
   @@index([valid_until, team_id, position_id, position_type_id], name: "team_roster_idx")
+  @@index([player_id, valid_from, valid_until], name: "team_roster_indx_player_id_timespan")
   @@map("team_roster")
 }
 
 model TimeMap {
-  season          Int
-  day             Int
-  first_time      DateTime
-  time_map_id     Int       @id @default(autoincrement())
-  time_event_type String?
+  season      Int
+  day         Int
+  first_time  DateTime?
+  time_map_id Int       @id @default(autoincrement())
+  phase_id    Int?
 
-  @@unique([season, day, time_event_type], name: "season_day_type_unique")
+  @@unique([season, day, phase_id], name: "season_day_unique")
   @@map("time_map")
 }
 
-// Views
-
+// @View - Must be manually updated with every new Prisma introspection
 model Player {
-  player_id           String
-  url_slug            String?
-  team_id             String?
-  team                String?
-  current_state       String?
+  player_id        String
+  player_name      String?
+  valid_from       DateTime
+  valid_until      DateTime?
+  deceased         Boolean?
+  anticapitalism   Float?
+  base_thirst      Float?
+  buoyancy         Float?
+  chasiness        Float?
+  coldness         Float?
+  continuation     Float?
+  divinity         Float?
+  ground_friction  Float?
+  indulgence       Float?
+  laserlikeness    Float?
+  martyrdom        Float?
+  moxie            Float?
+  musclitude       Float?
+  omniscience      Float?
+  overpowerment    Float?
+  patheticism      Float?
+  ruthlessness     Float?
+  shakespearianism Float?
+  suppression      Float?
+  tenaciousness    Float?
+  thwackability    Float?
+  tragicness       Float?
+  unthwackability  Float?
+  watchfulness     Float?
+  pressurization   Float?
+  cinnamon         Float?
+  total_fingers    Int?
+  soul             Int?
+  fate             Int?
+  peanut_allergy   Boolean?
+  armor            String?
+  bat              String?
+  ritual           String?
+  coffee           String?
+  blood            String?
+  url_slug         String?
+
   current_location    String?
-  position_type       String?
-  position_id         Int?
-  valid_from          DateTime
-  valid_until         DateTime?
+  current_state       String?
   gameday_from        Int
+  gamestate_from      String
+  position_id         Int?
+  position_type       String?
   season_from         Int
-  deceased            Boolean?
-  player_name         String?
-  anticapitalism      Float?
-  base_thirst         Float?
-  buoyancy            Float?
-  chasiness           Float?
-  coldness            Float?
-  continuation        Float?
-  divinity            Float?
-  ground_friction     Float?
-  indulgence          Float?
-  laserlikeness       Float?
-  martyrdom           Float?
-  moxie               Float?
-  musclitude          Float?
-  omniscience         Float?
-  overpowerment       Float?
-  patheticism         Float?
-  ruthlessness        Float?
-  shakespearianism    Float?
-  suppression         Float?
-  tenaciousness       Float?
-  thwackability       Float?
-  tragicness          Float?
-  unthwackability     Float?
-  watchfulness        Float?
-  pressurization      Float?
-  cinnamon            Float?
-  total_fingers       Int?
-  soul                Int?
-  fate                Int?
-  peanut_allergy      Boolean?
-  armor               String?
-  bat                 String?
-  ritual              String?
-  coffee              String?
-  blood               String?
+  team                String?
+  team_abbreviation   String?
+  team_id             String?
+  modifications       String[]
+  baserunning_rating  Int?
+  baserunning_stars   Int?
+  batting_rating      Int?
+  batting_stars       Int?
+  defense_rating      Int?
+  defense_stars       Int?
+  pitching_rating     Int?
+  pitching_stars      Int?
 
   @@id(fields: [player_id, valid_from])
   @@map("players_info_expanded_all")
 }
 
+// @View - Must be manually updated with every new Prisma introspection
 model Team {
-  team_id         String
-  location        String
-  nickname        String
-  full_name       String
-  url_slug        String
-  valid_from      DateTime
-  valid_until     DateTime?
-  gameday_from    Int
-  season_from     Int
-  division        String?
-  division_id     String?
-  league          String?
-  league_id       String?
+  team_id             String
+  location            String
+  nickname            String
+  full_name           String
+  team_abbreviation   String?
+  url_slug            String
+  current_team_status String
+  valid_from          DateTime
+  valid_until         DateTime?
+  gameday_from        Int
+  season_from         Int
+  division            String?
+  division_id         String?
+  league              String?
+  league_id           String?
+  tournament_name     String?
+  modifications       String[]
 
   @@id(fields: [team_id, valid_from])
   @@map("teams_info_expanded_all")
 }
 
-// Current Team Roster View
+// @View - Must be manually updated with every new Prisma introspection
 model CurrentTeamRoster {
-  player_id       String     @id
-  team_id         String
   valid_from      DateTime
   gameday_from    Int
   season_from     Int
+  team_id         String
   nickname        String
+  player_id       String    @id
   player_name     String
   position_type   String
   position_id     Int
