@@ -22,4 +22,5 @@ PGHOST=database.server.com
 PGPASSWORD=secretpassword
 PGDATABASE=mydb
 PGPORT=3211
+DATABASE_URL="postgresql://username:password@localhost:5432/database?schema=data"
 ```
