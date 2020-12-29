@@ -12,7 +12,7 @@
   "author": "Corvimae",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "^2.12.1",
+    "@prisma/client": "^2.13.1",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -27,7 +27,7 @@
     "@babel/core": "^7.12.3",
     "@babel/node": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
-    "@prisma/cli": "^2.12.1",
+    "@prisma/cli": "^2.13.1",
     "husky": ">=4",
     "lint-staged": ">=10",
     "nodemon": "^2.0.5",
