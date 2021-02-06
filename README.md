@@ -17,6 +17,7 @@ Datablase requires some environmental variables to be set. A list of these varia
 
 ```
 SIBR_PRODUCTION=0
+SIBR_API_SCHEME=http
 PGUSER=dbuser
 PGHOST=database.server.com
 PGPASSWORD=secretpassword
