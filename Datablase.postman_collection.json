@@ -1,0 +1,1772 @@
+{
+	"info": {
+		"_postman_id": "12c1a47a-da12-43b4-bd17-a6a69d2fc12d",
+		"name": "Datablase Tests",
+		"description": "Automated testing for the Datablase API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "Query for game events.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1117c5fa-7d55-476d-b8b4-b3335ef8b542",
+								"exec": [
+									"pm.test(\"Conner hits dingers\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.count).greaterThan(180);\r",
+									"    pm.expect(jsonData.results.length).equals(jsonData.count);\r",
+									"    pm.variables.set(\"conner_dingers\", jsonData.count);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/events?batterId=740d5fef-d59f-4dac-9a75-739ec07f91cf&type=HOME_RUN",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"events"
+							],
+							"query": [
+								{
+									"key": "playerId",
+									"value": "<string>",
+									"description": "The ID of a player that must be the batter or the pitcher in each event.",
+									"disabled": true
+								},
+								{
+									"key": "gameId",
+									"value": "<string>",
+									"description": "The ID of the game by which to filter results.",
+									"disabled": true
+								},
+								{
+									"key": "pitcherId",
+									"value": "<string>",
+									"description": "The ID of the pitcher that must be in each event.",
+									"disabled": true
+								},
+								{
+									"key": "batterId",
+									"value": "740d5fef-d59f-4dac-9a75-739ec07f91cf",
+									"description": "The ID of the batter that must be in each event."
+								},
+								{
+									"key": "type",
+									"value": "HOME_RUN",
+									"description": "The type of event by which to filter."
+								},
+								{
+									"key": "outcomes",
+									"value": "<boolean>",
+									"description": "Include child player event records.",
+									"disabled": true
+								},
+								{
+									"key": "baseRunners",
+									"value": "<boolean>",
+									"description": "Include child base runner records.",
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": "<string>",
+									"description": "The field by which to sort. Most text and numeric columns are supported.",
+									"disabled": true
+								},
+								{
+									"key": "sortDirection",
+									"value": "<string>",
+									"description": "The direction by which to sort. Must be one of ASC, DESC.",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Get the list of game events that match the query. One of `playerId`, `gameId`, `pitcherId`, `batterId` must be specified."
+					},
+					"response": [
+						{
+							"name": "The events that match the query and the number of matching events.",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/events?playerId=<string>&gameId=<string>&pitcherId=<string>&batterId=<string>&type=<string>&outcomes=<boolean>&baseRunners=<boolean>&sortBy=<string>&sortDirection=<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"events"
+									],
+									"query": [
+										{
+											"key": "playerId",
+											"value": "<string>"
+										},
+										{
+											"key": "gameId",
+											"value": "<string>"
+										},
+										{
+											"key": "pitcherId",
+											"value": "<string>"
+										},
+										{
+											"key": "batterId",
+											"value": "<string>"
+										},
+										{
+											"key": "type",
+											"value": "<string>"
+										},
+										{
+											"key": "outcomes",
+											"value": "<boolean>"
+										},
+										{
+											"key": "baseRunners",
+											"value": "<boolean>"
+										},
+										{
+											"key": "sortBy",
+											"value": "<string>"
+										},
+										{
+											"key": "sortDirection",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Calculate the number of events for each batter or pitcher.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "15eece25-9794-478b-bf05-057253a5c4dc",
+								"exec": [
+									"pm.test(\"Same number of dingers\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.batters[0].count === pm.variables.get(\"conner_dingers\"))\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Over 100 pitchers dinged\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.pitchers.length).greaterThan(100);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/countByType?eventType=HOME_RUN&batterId=740d5fef-d59f-4dac-9a75-739ec07f91cf",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"countByType"
+							],
+							"query": [
+								{
+									"key": "eventType",
+									"value": "HOME_RUN",
+									"description": "(Required) The type of event to count."
+								},
+								{
+									"key": "batterId",
+									"value": "740d5fef-d59f-4dac-9a75-739ec07f91cf",
+									"description": "The ID of the batter(s) by which to filter."
+								},
+								{
+									"key": "pitcherId",
+									"value": "<string>",
+									"description": "The ID of the pitcher(s) by which to filter.",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Get the number of events for a batter or pitcher with a certain `event_type`."
+					},
+					"response": [
+						{
+							"name": "The number of events the batter was involved in with the specified type.",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/countByType?eventType=<string>&batterId=<string>&pitcherId=<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"countByType"
+									],
+									"query": [
+										{
+											"key": "eventType",
+											"value": "<string>"
+										},
+										{
+											"key": "batterId",
+											"value": "<string>"
+										},
+										{
+											"key": "pitcherId",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Players",
+			"item": [
+				{
+					"name": "playerInfo",
+					"item": [
+						{
+							"name": "playerInfo by Player ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "10df4f19-6c88-4459-9995-514787691922",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/playerInfo?playerId=740d5fef-d59f-4dac-9a75-739ec07f91cf&all=true",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"playerInfo"
+									],
+									"query": [
+										{
+											"key": "playerId",
+											"value": "740d5fef-d59f-4dac-9a75-739ec07f91cf"
+										},
+										{
+											"key": "all",
+											"value": "true"
+										},
+										{
+											"key": "name",
+											"value": "<string>",
+											"description": "The name of the player (takes precedence if slug is specified)",
+											"disabled": true
+										},
+										{
+											"key": "slug",
+											"value": "<string>",
+											"description": "The url_slug of the player",
+											"disabled": true
+										}
+									]
+								},
+								"description": "Get extended player info for a given player, given a player id, name, or slug."
+							},
+							"response": [
+								{
+									"name": "array of objects",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/playerInfo?playerId=<string>&name=<string>&slug=<string>&all=<boolean>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"playerInfo"
+											],
+											"query": [
+												{
+													"key": "playerId",
+													"value": "<string>"
+												},
+												{
+													"key": "name",
+													"value": "<string>"
+												},
+												{
+													"key": "slug",
+													"value": "<string>"
+												},
+												{
+													"key": "all",
+													"value": "<boolean>"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "playerInfo by Name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ada8d3b4-0125-4bf1-9ada-179fbc2b3622",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/playerInfo?name=Conner Haley&all=true",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"playerInfo"
+									],
+									"query": [
+										{
+											"key": "playerId",
+											"value": "<string>",
+											"description": "The player ID of the player (takes precedence if other params are specified)",
+											"disabled": true
+										},
+										{
+											"key": "name",
+											"value": "Conner Haley",
+											"description": "The name of the player (takes precedence if slug is specified)"
+										},
+										{
+											"key": "slug",
+											"value": "<string>",
+											"description": "The url_slug of the player",
+											"disabled": true
+										},
+										{
+											"key": "all",
+											"value": "true",
+											"description": "(default:false) If true, all historical info for the player will be returned, rather than just the current info"
+										}
+									]
+								},
+								"description": "Get extended player info for a given player, given a player id, name, or slug."
+							},
+							"response": [
+								{
+									"name": "array of objects",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/playerInfo?playerId=<string>&name=<string>&slug=<string>&all=<boolean>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"playerInfo"
+											],
+											"query": [
+												{
+													"key": "playerId",
+													"value": "<string>"
+												},
+												{
+													"key": "name",
+													"value": "<string>"
+												},
+												{
+													"key": "slug",
+													"value": "<string>"
+												},
+												{
+													"key": "all",
+													"value": "<boolean>"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "playerInfo by Slug",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c50fbca3-e6d7-4cf4-a0d7-6d9c0ba5e55f",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/playerInfo?all=true&slug=conner-haley",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"playerInfo"
+									],
+									"query": [
+										{
+											"key": "playerId",
+											"value": "<string>",
+											"description": "The player ID of the player (takes precedence if other params are specified)",
+											"disabled": true
+										},
+										{
+											"key": "name",
+											"value": "<string>",
+											"description": "The name of the player (takes precedence if slug is specified)",
+											"disabled": true
+										},
+										{
+											"key": "all",
+											"value": "true",
+											"description": "(default:false) If true, all historical info for the player will be returned, rather than just the current info"
+										},
+										{
+											"key": "slug",
+											"value": "conner-haley"
+										}
+									]
+								},
+								"description": "Get extended player info for a given player, given a player id, name, or slug."
+							},
+							"response": [
+								{
+									"name": "array of objects",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/playerInfo?playerId=<string>&name=<string>&slug=<string>&all=<boolean>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"playerInfo"
+											],
+											"query": [
+												{
+													"key": "playerId",
+													"value": "<string>"
+												},
+												{
+													"key": "name",
+													"value": "<string>"
+												},
+												{
+													"key": "slug",
+													"value": "<string>"
+												},
+												{
+													"key": "all",
+													"value": "<boolean>"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a4c331f3-6b9b-47f4-bc81-11b325edde67",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ca1df43-029f-4c0f-8c92-a5fcfb2f6d5d",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"More than 1 result\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).greaterThan(1);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "playerIdsByName",
+					"item": [
+						{
+							"name": "playerIdsByName: Wyatt Mason",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a7dc2960-119d-45fa-9802-0f2176b53b51",
+										"exec": [
+											"pm.test(\"More than 10 results\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.length).greaterThan(10);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/playerIdsByName?name=Wyatt Mason&current=false",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"playerIdsByName"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Wyatt Mason",
+											"description": "The name of the player"
+										},
+										{
+											"key": "current",
+											"value": "false",
+											"description": "If true, only players currently using this name will be returned"
+										}
+									]
+								},
+								"description": "Get all player IDs matching a given name"
+							},
+							"response": [
+								{
+									"name": "Wyatt Mason",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/playerIdsByName?name=Wyatt Mason&current=false",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"playerIdsByName"
+											],
+											"query": [
+												{
+													"key": "name",
+													"value": "Wyatt Mason",
+													"description": "The name of the player"
+												},
+												{
+													"key": "current",
+													"value": "false",
+													"description": "If true, only players currently using this name will be returned"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.19.1"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 28 Nov 2020 03:56:02 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "2431"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"97f-LVEvqdJXFDbfuURjGB1yAmWRUkY\""
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"player_id\": \"0bb35615-63f2-4492-80ec-b6b322dc5450\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"0d5300f6-0966-430f-903f-a4c2338abf00\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:55:48.749Z\"\n    },\n    {\n        \"player_id\": \"1f159bab-923a-4811-b6fa-02bfde50925a\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"21d52455-6c2c-4ee4-8673-ab46b4b926b4\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"27c68d7f-5e40-4afa-8b6f-9df47b79e7dd\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"5ca7e854-dc00-4955-9235-d7fcd732ddcf\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"63df8701-1871-4987-87d7-b55d4f1df2e9\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T22:10:51.203Z\"\n    },\n    {\n        \"player_id\": \"75f9d874-5e69-438d-900d-a3fcb1d429b3\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:10:40.842Z\"\n    },\n    {\n        \"player_id\": \"80e474a3-7d2b-431d-8192-2f1e27162607\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-12T20:25:34.306Z\",\n        \"valid_until\": \"2020-08-12T20:40:36.879Z\"\n    },\n    {\n        \"player_id\": \"a1ed3396-114a-40bc-9ff0-54d7e1ad1718\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T20:55:38.256Z\"\n    },\n    {\n        \"player_id\": \"bf6a24d1-4e89-4790-a4ba-eeb2870cbf6f\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:40:45.977Z\"\n    },\n    {\n        \"player_id\": \"e16c3f28-eecd-4571-be1a-606bbac36b2b\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T20:55:38.256Z\"\n    },\n    {\n        \"player_id\": \"e4034192-4dc6-4901-bb30-07fe3cf77b5e\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"ea44bd36-65b4-4f3b-ac71-78d87a540b48\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:40:45.977Z\"\n    },\n    {\n        \"player_id\": \"f741dc01-2bae-4459-bfc0-f97536193eea\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "playerIdsByName: Valid Player",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "45e0ba30-6237-4475-8e5e-d27b0e8cdb34",
+										"exec": [
+											"pm.test(\"Single result\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.length).to.eql(1);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/playerIdsByName?name=Conner Haley&current=true",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"playerIdsByName"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Conner Haley",
+											"description": "The name of the player"
+										},
+										{
+											"key": "current",
+											"value": "true",
+											"description": "If true, only players currently using this name will be returned"
+										}
+									]
+								},
+								"description": "Get all player IDs matching a given name"
+							},
+							"response": [
+								{
+									"name": "Wyatt Mason",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/playerIdsByName?name=Wyatt Mason&current=false",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"playerIdsByName"
+											],
+											"query": [
+												{
+													"key": "name",
+													"value": "Wyatt Mason",
+													"description": "The name of the player"
+												},
+												{
+													"key": "current",
+													"value": "false",
+													"description": "If true, only players currently using this name will be returned"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.19.1"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 28 Nov 2020 03:56:02 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "2431"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"97f-LVEvqdJXFDbfuURjGB1yAmWRUkY\""
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"player_id\": \"0bb35615-63f2-4492-80ec-b6b322dc5450\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"0d5300f6-0966-430f-903f-a4c2338abf00\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:55:48.749Z\"\n    },\n    {\n        \"player_id\": \"1f159bab-923a-4811-b6fa-02bfde50925a\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"21d52455-6c2c-4ee4-8673-ab46b4b926b4\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"27c68d7f-5e40-4afa-8b6f-9df47b79e7dd\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"5ca7e854-dc00-4955-9235-d7fcd732ddcf\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"63df8701-1871-4987-87d7-b55d4f1df2e9\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T22:10:51.203Z\"\n    },\n    {\n        \"player_id\": \"75f9d874-5e69-438d-900d-a3fcb1d429b3\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:10:40.842Z\"\n    },\n    {\n        \"player_id\": \"80e474a3-7d2b-431d-8192-2f1e27162607\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-12T20:25:34.306Z\",\n        \"valid_until\": \"2020-08-12T20:40:36.879Z\"\n    },\n    {\n        \"player_id\": \"a1ed3396-114a-40bc-9ff0-54d7e1ad1718\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T20:55:38.256Z\"\n    },\n    {\n        \"player_id\": \"bf6a24d1-4e89-4790-a4ba-eeb2870cbf6f\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:40:45.977Z\"\n    },\n    {\n        \"player_id\": \"e16c3f28-eecd-4571-be1a-606bbac36b2b\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T20:55:38.256Z\"\n    },\n    {\n        \"player_id\": \"e4034192-4dc6-4901-bb30-07fe3cf77b5e\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"ea44bd36-65b4-4f3b-ac71-78d87a540b48\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:40:45.977Z\"\n    },\n    {\n        \"player_id\": \"f741dc01-2bae-4459-bfc0-f97536193eea\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "playerIdsByName: Invalid Player",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4b653936-489c-47fd-82e8-644534cdb929",
+										"exec": [
+											"pm.test(\"Expected no results\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.length).to.eql(0);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/playerIdsByName?name=Fakey McFakeName&current=true",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"playerIdsByName"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Fakey McFakeName",
+											"description": "The name of the player"
+										},
+										{
+											"key": "current",
+											"value": "true",
+											"description": "If true, only players currently using this name will be returned"
+										}
+									]
+								},
+								"description": "Get all player IDs matching a given name"
+							},
+							"response": [
+								{
+									"name": "Wyatt Mason",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/playerIdsByName?name=Wyatt Mason&current=false",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"playerIdsByName"
+											],
+											"query": [
+												{
+													"key": "name",
+													"value": "Wyatt Mason",
+													"description": "The name of the player"
+												},
+												{
+													"key": "current",
+													"value": "false",
+													"description": "If true, only players currently using this name will be returned"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Server",
+											"value": "nginx/1.19.1"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 28 Nov 2020 03:56:02 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "2431"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"97f-LVEvqdJXFDbfuURjGB1yAmWRUkY\""
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"player_id\": \"0bb35615-63f2-4492-80ec-b6b322dc5450\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"0d5300f6-0966-430f-903f-a4c2338abf00\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:55:48.749Z\"\n    },\n    {\n        \"player_id\": \"1f159bab-923a-4811-b6fa-02bfde50925a\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"21d52455-6c2c-4ee4-8673-ab46b4b926b4\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"27c68d7f-5e40-4afa-8b6f-9df47b79e7dd\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"5ca7e854-dc00-4955-9235-d7fcd732ddcf\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"63df8701-1871-4987-87d7-b55d4f1df2e9\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T22:10:51.203Z\"\n    },\n    {\n        \"player_id\": \"75f9d874-5e69-438d-900d-a3fcb1d429b3\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:10:40.842Z\"\n    },\n    {\n        \"player_id\": \"80e474a3-7d2b-431d-8192-2f1e27162607\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-12T20:25:34.306Z\",\n        \"valid_until\": \"2020-08-12T20:40:36.879Z\"\n    },\n    {\n        \"player_id\": \"a1ed3396-114a-40bc-9ff0-54d7e1ad1718\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T20:55:38.256Z\"\n    },\n    {\n        \"player_id\": \"bf6a24d1-4e89-4790-a4ba-eeb2870cbf6f\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:40:45.977Z\"\n    },\n    {\n        \"player_id\": \"e16c3f28-eecd-4571-be1a-606bbac36b2b\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T20:55:38.256Z\"\n    },\n    {\n        \"player_id\": \"e4034192-4dc6-4901-bb30-07fe3cf77b5e\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    },\n    {\n        \"player_id\": \"ea44bd36-65b4-4f3b-ac71-78d87a540b48\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:40:45.977Z\"\n    },\n    {\n        \"player_id\": \"f741dc01-2bae-4459-bfc0-f97536193eea\",\n        \"player_name\": \"Wyatt Mason\",\n        \"valid_from\": \"2020-08-09T19:27:41.958Z\",\n        \"valid_until\": \"2020-08-12T21:25:43.399Z\"\n    }\n]"
+								}
+							]
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "deceased",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/deceased",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"deceased"
+							]
+						},
+						"description": "Get all currently decieased players"
+					},
+					"response": [
+						{
+							"name": "Array of player objects",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/deceased",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"deceased"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "taggedPlayers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "da33cdcf-5ae1-421c-b7a5-9a52873a8944",
+								"exec": [
+									"pm.test(\"More than 5 tagged players\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length).greaterThan(5);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/taggedPlayers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"taggedPlayers"
+							]
+						},
+						"description": "Get the list of all players currently tagged with some kind of modification (like SHELLED)"
+					},
+					"response": [
+						{
+							"name": "array of player information including current team id/nickname",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/taggedPlayers",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"taggedPlayers"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "allPlayers (no shadows)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ba26bde4-6c0d-4b5f-9c31-47708feb74cb",
+								"exec": [
+									"\r",
+									"pm.test(\"Greater than 200 players\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length).greaterThan(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/allPlayers?includeShadows=false",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"allPlayers"
+							],
+							"query": [
+								{
+									"key": "includeShadows",
+									"value": "false",
+									"description": "whether to include players in the Shadows"
+								}
+							]
+						},
+						"description": "Get the current list of all known players"
+					},
+					"response": [
+						{
+							"name": "list of players",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/allPlayers?includeShadows=<boolean>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"allPlayers"
+									],
+									"query": [
+										{
+											"key": "includeShadows",
+											"value": "<boolean>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "allPlayersForGameday S10D10",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bb488c4e-7449-4b0c-9cf2-abecb690cbe3",
+								"exec": [
+									"pm.test(\"Should get >300 players for S10D10\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length).greaterThan(300);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/allPlayersForGameday?season=10&day=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"allPlayersForGameday"
+							],
+							"query": [
+								{
+									"key": "season",
+									"value": "10",
+									"description": "Season to query (zero-indexed)"
+								},
+								{
+									"key": "day",
+									"value": "10",
+									"description": "Day to query (zero-indexed)"
+								}
+							]
+						},
+						"description": "Get the list of all players and their data as of a specific Season and Gameday"
+					},
+					"response": [
+						{
+							"name": "array of player information including current team id/nickname",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/allPlayersForGameday?season=<number>&day=<number>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"allPlayersForGameday"
+									],
+									"query": [
+										{
+											"key": "season",
+											"value": "<number>"
+										},
+										{
+											"key": "day",
+											"value": "<number>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Teams",
+			"item": [
+				{
+					"name": "currentRoster",
+					"item": [
+						{
+							"name": "currentRoster by teamId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f3752d33-f9e5-487c-9964-46da34ffb14f",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/currentRoster?teamId=b024e975-1c4a-4575-8936-a3754a08806a",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"currentRoster"
+									],
+									"query": [
+										{
+											"key": "teamId",
+											"value": "b024e975-1c4a-4575-8936-a3754a08806a",
+											"description": "The ID of the team (takes precedence if slug is given)"
+										},
+										{
+											"key": "slug",
+											"value": "<string>",
+											"description": "The slug of the team",
+											"disabled": true
+										}
+									]
+								},
+								"description": "Get the current roster for a given team, using either ID or slug."
+							},
+							"response": [
+								{
+									"name": "array of roster information",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/currentRoster?teamId=<string>&slug=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"currentRoster"
+											],
+											"query": [
+												{
+													"key": "teamId",
+													"value": "<string>"
+												},
+												{
+													"key": "slug",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "currentRoster by slug",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/currentRoster?slug=steaks",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"currentRoster"
+									],
+									"query": [
+										{
+											"key": "teamId",
+											"value": "<string>",
+											"description": "The ID of the team (takes precedence if slug is given)",
+											"disabled": true
+										},
+										{
+											"key": "slug",
+											"value": "steaks",
+											"description": "The slug of the team"
+										}
+									]
+								},
+								"description": "Get the current roster for a given team, using either ID or slug."
+							},
+							"response": [
+								{
+									"name": "array of roster information",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/currentRoster?teamId=<string>&slug=<string>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"currentRoster"
+											],
+											"query": [
+												{
+													"key": "teamId",
+													"value": "<string>"
+												},
+												{
+													"key": "slug",
+													"value": "<string>"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "572db828-47cd-4fb0-b745-64ec7d77cd2e",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "6c2d86a5-5306-4397-b24c-61766799ff56",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"More than one player\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).greaterThan(1);",
+									"});"
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "allTeams",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bceb5ed8-d2f3-495a-b0b8-8830bc2cac9d",
+								"exec": [
+									"\r",
+									"pm.test(\"More than 36 teams\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length).greaterThan(36);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/allTeams",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"allTeams"
+							]
+						},
+						"description": "Get all current teams"
+					},
+					"response": [
+						{
+							"name": "list of current teams",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/allTeams",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"allTeams"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "allTeamStars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fa47617a-c2ec-45e6-86bd-d1c20a0d6363",
+								"exec": [
+									"\r",
+									"pm.test(\"More than 36 teams\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length).greaterThan(36);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/allTeamStars",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"allTeamStars"
+							]
+						},
+						"description": "Get current star values for all teams"
+					},
+					"response": [
+						{
+							"name": "list of current team stars",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/allTeamStars",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"allTeamStars"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Statistics V2",
+			"item": [
+				{
+					"name": "Get the season leaders for a given category and stat",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "044eddee-f753-4ae5-8b97-9ee4d519f783",
+								"exec": [
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length).to.eql(10);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/seasonLeaders?season=9&category=batting&stat=home_runs&order=DESC&limit=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"seasonLeaders"
+							],
+							"query": [
+								{
+									"key": "season",
+									"value": "9",
+									"description": "Season to query (zero-indexed)"
+								},
+								{
+									"key": "category",
+									"value": "batting",
+									"description": "Stat category (batting, pitching, running, or fielding)"
+								},
+								{
+									"key": "stat",
+									"value": "home_runs",
+									"description": "Stat to get the leaders for (as returned from /playerStats)"
+								},
+								{
+									"key": "order",
+									"value": "DESC",
+									"description": "Ordering to use for ranking (ASC or DESC)"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of leaders to return"
+								}
+							]
+						},
+						"description": "Get the season leaders for a given category and stat"
+					},
+					"response": [
+						{
+							"name": "list of leaders",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/seasonLeaders?season=<number>&category=<string>&stat=<string>&order=<string>&limit=<number>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"seasonLeaders"
+									],
+									"query": [
+										{
+											"key": "season",
+											"value": "<number>"
+										},
+										{
+											"key": "category",
+											"value": "<string>"
+										},
+										{
+											"key": "stat",
+											"value": "<string>"
+										},
+										{
+											"key": "order",
+											"value": "<string>"
+										},
+										{
+											"key": "limit",
+											"value": "<number>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Get categorical statistics for the given players",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "251804af-1e1a-4c2a-ad37-c230c0dba1ee",
+								"exec": [
+									"pm.test(\"Exactly 1 result\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.length).to.eql(1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/playerStats?category=batting&season=9&playerIds=740d5fef-d59f-4dac-9a75-739ec07f91cf",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"playerStats"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "batting",
+									"description": "either 'batting' or 'pitching'"
+								},
+								{
+									"key": "season",
+									"value": "9",
+									"description": "(optional) season to get stats for"
+								},
+								{
+									"key": "playerIds",
+									"value": "740d5fef-d59f-4dac-9a75-739ec07f91cf",
+									"description": "comma-separated list of player IDs"
+								}
+							]
+						},
+						"description": "Get performance statistics for a given list of players"
+					},
+					"response": [
+						{
+							"name": "list of player statistics",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/playerStats?category=<string>&season=<number>&playerIds=<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"playerStats"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "<string>"
+										},
+										{
+											"key": "season",
+											"value": "<number>"
+										},
+										{
+											"key": "playerIds",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "b816253d-77c8-4ec0-8011-8245bdaf23d5",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "4ce46886-7256-4c31-87c5-6af72b5ad3cb",
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Status code is 200\", function () {",
+					"    pm.response.to.have.status(200);",
+					"});",
+					"",
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "9eaf2599-66d2-4248-ad9f-ad63981f0189",
+			"key": "baseUrl",
+			"value": "https://api.blaseball-reference.com/v1"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -1,0 +1,31 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    if: github.repository == 'Society-for-Internet-Blaseball-Research/datablase'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Create Tag
+        uses: salsify/action-detect-and-tag-new-version@v2
+        with:
+          version-command: |
+            grep "\"version\"" package.json | sed 's/ *"version": "//g' | sed 's/",//g'
+      - name: Get version
+        run: ./get_version.sh
+      - name: Push to Docker Hub
+        uses: docker/build-push-action@v1
+        if: env.image_name != 'abort'
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: blaseballsibr/datablase
+          tags: ${{ env.image_name }}
