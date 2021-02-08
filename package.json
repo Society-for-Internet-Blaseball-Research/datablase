@@ -1,19 +1,18 @@
 {
   "name": "sibr-api",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "API for SIBR statistics.",
   "main": "lib/index.js",
   "scripts": {
     "build": "babel lib -d dist",
     "dev": "nodemon --exec babel-node lib/index.js",
-    "postinstall": "prisma generate",
     "start": "yarn run build && node dist/index.js"
   },
   "repository": "https://github.com/Society-For-Blaseball-Research/sibr-api",
   "author": "Corvimae",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "^2.16.0",
+    "@prisma/client": "^2.16.1",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -24,15 +23,15 @@
     "regenerator-runtime": "^0.13.7"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.1",
-    "@babel/core": "^7.12.3",
-    "@babel/node": "^7.12.1",
-    "@babel/preset-env": "^7.12.1",
-    "@prisma/cli": "^2.16.0",
+    "@babel/cli": "^7.12.13",
+    "@babel/core": "^7.12.13",
+    "@babel/node": "^7.12.13",
+    "@babel/preset-env": "^7.12.13",
+    "@prisma/cli": "^2.16.1",
     "husky": ">=4",
     "lint-staged": ">=10",
-    "nodemon": "^2.0.5",
-    "prettier": "^2.1.2"
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1"
   },
   "husky": {
     "hooks": {

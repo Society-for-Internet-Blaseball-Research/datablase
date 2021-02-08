@@ -3,12 +3,14 @@ FROM node:latest
 # Setting working directory. All the path will be relative to WORKDIR
 WORKDIR /usr/src/app
 
-# Installing dependencies
-COPY package*.json ./
-RUN yarn install
+# Install dependencies
+COPY package.json yarn.lock ./
+COPY prisma ./prisma
+RUN yarn install --production --frozen-lockfile
+RUN npx prisma generate
 
-# Copying source files
+# Copy source files
 COPY . .
 
 # Running the app
-CMD [ "npm", "start" ]
+CMD [ "yarn", "run", "start" ]
