@@ -327,6 +327,8 @@ model CurrentTeamRoster {
   @@map("rosters_current")
 }
 
+// Batting Stats
+
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerBattingStatsSeason {
   player_id             String
@@ -359,6 +361,8 @@ model PlayerBattingStatsSeason {
   ground_outs           Int
   flyouts               Int
   gidp                  Int
+
+  runningStats          PlayerRunningStatsSeason  @relation(fields: [player_id, season], references: [player_id, season])
 
   @@id(fields: [player_id, season])
   @@map("batting_stats_player_season")
@@ -397,10 +401,13 @@ model PlayerBattingStatsPostseason {
   flyouts               Int
   gidp                  Int
 
+  runningStats          PlayerRunningStatsPostseason  @relation(fields: [player_id, season], references: [player_id, season])
+
   @@id(fields: [player_id, season])
   @@map("batting_stats_player_playoffs_season")
 }
 
+// Pitching Stats
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerPitchingStatsSeason {
@@ -468,4 +475,32 @@ model PlayerPitchingStatsPostseason {
 
   @@id(fields: [player_id, season])
   @@map("pitching_stats_player_playoffs_season")
+}
+
+// Base Running Stats
+
+// @View - Must be manually updated with every new Prisma introspection
+model PlayerRunningStatsSeason {
+  player_id       String
+  player_name     String
+  season          Int
+  stolen_bases    Int
+  caught_stealing Int
+  runs            Int
+
+  @@id(fields: [player_id, season])
+  @@map("running_stats_player_season")
+}
+
+// @View - Must be manually updated with every new Prisma introspection
+model PlayerRunningStatsPostseason {
+  player_id       String
+  player_name     String
+  season          Int
+  stolen_bases    Int
+  caught_stealing Int
+  runs            Int
+
+  @@id(fields: [player_id, season])
+  @@map("running_stats_player_playoffs_season")
 }
