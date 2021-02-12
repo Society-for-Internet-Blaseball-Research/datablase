@@ -362,7 +362,7 @@ model PlayerBattingStatsSeason {
   flyouts               Int
   gidp                  Int
 
-  runningStats          PlayerRunningStatsSeason  @relation(fields: [player_id, season], references: [player_id, season])
+  runningStats          PlayerRunningStatsSeason?
 
   @@id(fields: [player_id, season])
   @@map("batting_stats_player_season")
@@ -401,7 +401,7 @@ model PlayerBattingStatsPostseason {
   flyouts               Int
   gidp                  Int
 
-  runningStats          PlayerRunningStatsPostseason  @relation(fields: [player_id, season], references: [player_id, season])
+  runningStats          PlayerRunningStatsPostseason?
 
   @@id(fields: [player_id, season])
   @@map("batting_stats_player_playoffs_season")
@@ -442,6 +442,8 @@ model PlayerPitchingStatsSeason {
   @@id(fields: [player_id, season])
   @@map("pitching_stats_player_season")
 }
+
+// @TODO: Use Player to set up relations for stats?
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerPitchingStatsPostseason {
@@ -488,6 +490,8 @@ model PlayerRunningStatsSeason {
   caught_stealing Int
   runs            Int
 
+  battingStats    PlayerBattingStatsSeason  @relation(fields: [player_id, season], references: [player_id, season])
+
   @@id(fields: [player_id, season])
   @@map("running_stats_player_season")
 }
@@ -500,6 +504,8 @@ model PlayerRunningStatsPostseason {
   stolen_bases    Int
   caught_stealing Int
   runs            Int
+
+  battingStats    PlayerBattingStatsPostseason  @relation(fields: [player_id, season], references: [player_id, season])
 
   @@id(fields: [player_id, season])
   @@map("running_stats_player_playoffs_season")
