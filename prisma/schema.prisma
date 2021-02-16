@@ -334,7 +334,8 @@ model PlayerBattingStatsSeason {
   player_id             String
   player_name           String
   team_id               String
-  team                  String
+  team_valid_from       DateTime
+  team_valid_until      DateTime?
   season                Int
   batting_average       Float?
   on_base_percentage    Float?
@@ -363,6 +364,7 @@ model PlayerBattingStatsSeason {
   gidp                  Int
 
   runningStats          PlayerRunningStatsSeason?
+  team                  Team                      @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
 
   @@id(fields: [player_id, season])
   @@map("batting_stats_player_season")
@@ -373,7 +375,8 @@ model PlayerBattingStatsPostseason {
   player_id             String
   player_name           String
   team_id               String
-  team                  String
+  team_valid_from       DateTime
+  team_valid_until      DateTime?
   season                Int
   batting_average       Float?
   on_base_percentage    Float?
@@ -402,6 +405,7 @@ model PlayerBattingStatsPostseason {
   gidp                  Int
 
   runningStats          PlayerRunningStatsPostseason?
+  team                  Team                      @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
 
   @@id(fields: [player_id, season])
   @@map("batting_stats_player_playoffs_season")
@@ -415,6 +419,8 @@ model PlayerPitchingStatsSeason {
   player_name           String
   season                Int
   team_id               String
+  team_valid_from       DateTime
+  team_valid_until      DateTime?
   games                 Int
   wins                  Int
   losses                Int
@@ -438,6 +444,8 @@ model PlayerPitchingStatsSeason {
   home_runs_per_9       Float
   whip                  Float
   strikeouts_per_walk   Float
+
+  team                  Team  @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
 
   @@id(fields: [player_id, season])
   @@map("pitching_stats_player_season")
@@ -451,6 +459,8 @@ model PlayerPitchingStatsPostseason {
   player_name           String
   season                Int
   team_id               String
+  team_valid_from       DateTime
+  team_valid_until      DateTime?
   games                 Int
   wins                  Int
   losses                Int
@@ -474,6 +484,8 @@ model PlayerPitchingStatsPostseason {
   home_runs_per_9       Float
   whip                  Float
   strikeouts_per_walk   Float
+
+  team                  Team  @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
 
   @@id(fields: [player_id, season])
   @@map("pitching_stats_player_playoffs_season")
