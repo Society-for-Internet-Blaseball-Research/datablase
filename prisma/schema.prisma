@@ -411,6 +411,78 @@ model PlayerBattingStatsPostseason {
   @@map("batting_stats_player_playoffs_season")
 }
 
+// @View - Must be manually updated with every new Prisma introspection
+model PlayerBattingStatsLifetime {
+  player_id             String
+  player_name           String
+  batting_average       Float?
+  on_base_percentage    Float?
+  slugging              Float?
+  plate_appearances     Int
+  at_bats               Int
+  hits                  Int
+  walks                 Int
+  singles               Int
+  doubles               Int
+  triples               Int
+  quadruples            Int
+  home_runs             Int
+  runs_batted_in        Int
+  strikeouts            Int
+  sacrifice_bunts        Int
+  sacrifice_flies         Int
+  at_bats_risp          Int
+  hits_risp             Int
+  batting_average_risp  Float?
+  on_base_slugging      Float?
+  total_bases           Int
+  hit_by_pitches        Int
+  ground_outs           Int
+  flyouts               Int
+  gidp                  Int
+
+  runningStats          PlayerRunningStatsLifetime?
+
+  @@id(fields: [player_id])
+  @@map("batting_stats_player_lifetime")
+}
+
+// @View - Must be manually updated with every new Prisma introspection
+model PlayerBattingStatsPostseasonLifetime {
+  player_id             String
+  player_name           String
+  batting_average       Float?
+  on_base_percentage    Float?
+  slugging              Float?
+  plate_appearances     Int
+  at_bats               Int
+  hits                  Int
+  walks                 Int
+  singles               Int
+  doubles               Int
+  triples               Int
+  quadruples            Int
+  home_runs             Int
+  runs_batted_in        Int
+  strikeouts            Int
+  sacrifice_bunts        Int
+  sacrifice_flies         Int
+  at_bats_risp          Int
+  hits_risp             Int
+  batting_average_risp  Float?
+  on_base_slugging      Float?
+  total_bases           Int
+  hit_by_pitches        Int
+  ground_outs           Int
+  flyouts               Int
+  gidp                  Int
+
+  runningStats          PlayerRunningStatsPostseasonLifetime?
+
+  @@id(fields: [player_id])
+  @@map("batting_stats_player_playoffs_lifetime")
+}
+
 // Pitching Stats
 
 // @View - Must be manually updated with every new Prisma introspection
@@ -491,6 +563,72 @@ model PlayerPitchingStatsPostseason {
   @@map("pitching_stats_player_playoffs_season")
 }
 
+// @View - Must be manually updated with every new Prisma introspection
+model PlayerPitchingStatsLifetime {
+  player_id             String
+  player_name           String
+  games                 Int
+  wins                  Int
+  losses                Int
+  win_pct               Float
+  pitches_thrown        Int
+  batters_faced         Int
+  outs_recorded         Int
+  innings               Int
+  runs_allowed          Int
+  shutouts              Int
+  quality_starts        Int
+  strikeouts            Int
+  walks                 Int
+  home_runs_allowed     Int
+  hits_allowed          Int
+  hit_by_pitches        Float
+  earned_run_average    Float
+  walks_per_9           Float
+  hits_per_9            Float
+  strikeouts_per_9      Float
+  home_runs_per_9       Float
+  whip                  Float
+  strikeouts_per_walk   Float
+
+
+  @@id(fields: [player_id])
+  @@map("pitching_stats_player_lifetime")
+}
+
+// @View - Must be manually updated with every new Prisma introspection
+model PlayerPitchingStatsPostseasonLifetime {
+  player_id             String
+  player_name           String
+  games                 Int
+  wins                  Int
+  losses                Int
+  win_pct               Float
+  pitches_thrown        Int
+  // batters_faced         Int
+  outs_recorded         Int
+  innings               Int
+  runs_allowed          Int
+  shutouts              Int
+  quality_starts        Int
+  strikeouts            Int
+  walks                 Int
+  home_runs_allowed     Int
+  hits_allowed          Int
+  hit_by_pitches        Float
+  earned_run_average    Float
+  walks_per_9           Float
+  hits_per_9            Float
+  strikeouts_per_9      Float
+  home_runs_per_9       Float
+  whip                  Float
+  strikeouts_per_walk   Float
+
+
+  @@id(fields: [player_id])
+  @@map("pitching_stats_player_playoffs_lifetime")
+}
+
 // Base Running Stats
 
 // @View - Must be manually updated with every new Prisma introspection
@@ -521,4 +659,60 @@ model PlayerRunningStatsPostseason {
 
   @@id(fields: [player_id, season])
   @@map("running_stats_player_playoffs_season")
+}
+
+// @View - Must be manually updated with every new Prisma introspection
+model PlayerRunningStatsLifetime {
+  player_id       String
+  player_name     String
+  stolen_bases    Int
+  caught_stealing Int
+  runs            Int
+
+  battingStats    PlayerBattingStatsLifetime  @relation(fields: [player_id], references: [player_id])
+
+  @@id(fields: [player_id])
+  @@map("running_stats_player_lifetime")
+}
+
+// @View - Must be manually updated with every new Prisma introspection
+model PlayerRunningStatsPostseasonLifetime {
+  player_id       String
+  player_name     String
+  stolen_bases    Int
+  caught_stealing Int
+  runs            Int
+
+  battingStats    PlayerBattingStatsPostseasonLifetime  @relation(fields: [player_id], references: [player_id])
+
+  @@id(fields: [player_id])
+  @@map("running_stats_player_playoffs_lifetime")
+}
+
+// Leaderboards
+
+// @View - Must be manually updated with every new Prisma introspection
+model PlayerBattingLeaderboardsLifetime {
+  player_id       String
+  player_name     String
+  url_slug        String
+  value           Float
+  rank            Int
+  stat            String
+
+  @@id(fields: [player_id])
+  @@map("ref_leaderboard_lifetime_batting")
+}
+
+// @View - Must be manually updated with every new Prisma introspection
+model PlayerPitchingLeaderboardsLifetime {
+  player_id       String
+  player_name     String
+  url_slug        String
+  value           Float
+  rank            Int
+  stat            String
+
+  @@id(fields: [player_id])
+  @@map("ref_leaderboard_lifetime_pitching")
 }
