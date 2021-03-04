@@ -303,10 +303,10 @@ model Team {
   league_id             String?
   tournament_name       String?
   modifications          String[]
-  team_main_color       String
-  team_secondary_color  String
-  team_slogan           String
-  team_emoji            String
+  team_main_color       String?
+  team_secondary_color  String?
+  team_slogan           String?
+  team_emoji            String?
 
   @@id(fields: [team_id, valid_from])
   @@map("teams_info_expanded_all")
