@@ -25,3 +25,14 @@ PGDATABASE=mydb
 PGPORT=3211
 DATABASE_URL="postgresql://username:password@localhost:5432/database?schema=data"
 ```
+
+## Installation
+
+1. `cd datablase` to go into the project root
+1. `yarn` to install the website's dependencies
+1. `npx prisma generate` to generate the [Prisma](https://prisma.io) query engine binary used by v2 endpoints
+
+## Running Locally
+
+1. `yarn dev` to start the development server
+1. `open http://localhost:3000/` to open the development server
