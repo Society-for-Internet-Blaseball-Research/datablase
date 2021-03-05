@@ -1,6 +1,6 @@
 {
   "name": "sibr-api",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "description": "API for SIBR statistics.",
   "main": "lib/index.js",
   "scripts": {
@@ -12,7 +12,7 @@
   "author": "Corvimae",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "^2.17.0",
+    "@prisma/client": "^2.18.0",
     "core-js": "^3.9.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -31,7 +31,7 @@
     "lint-staged": ">=10",
     "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
-    "prisma": "^2.17.0"
+    "prisma": "^2.18.0"
   },
   "husky": {
     "hooks": {
