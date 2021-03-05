@@ -253,32 +253,32 @@ model Player {
   blood            String?
   url_slug         String?
 
-  current_state         String?
-  current_location      String?
-  debut_gameday         Int?
-  debut_season          Int?
-  debut_tournament      Int?
-  incineration_season   Int?
-  incineration_gameday  Int?
-  incineration_phase    String?
-  gameday_from          Int?
-  season_from           Int?
-  tournament_from       Int?
-  phase_type_from       String?
-  position_id           Int?
-  position_type         String?
-  team                  String?
-  team_abbreviation     String?
-  team_id               String?
-  modifications         String[]
-  baserunning_rating    Int?
-  baserunning_stars     Int?
-  batting_rating        Int?
-  batting_stars         Int?
-  defense_rating        Int?
-  defense_stars         Int?
-  pitching_rating       Int?
-  pitching_stars        Int?
+  current_state        String?
+  current_location     String?
+  debut_gameday        Int?
+  debut_season         Int?
+  debut_tournament     Int?
+  incineration_season  Int?
+  incineration_gameday Int?
+  incineration_phase   String?
+  gameday_from         Int?
+  season_from          Int?
+  tournament_from      Int?
+  phase_type_from      String?
+  position_id          Int?
+  position_type        String?
+  team                 String?
+  team_abbreviation    String?
+  team_id              String?
+  modifications        String[]
+  baserunning_rating   Int?
+  baserunning_stars    Int?
+  batting_rating       Int?
+  batting_stars        Int?
+  defense_rating       Int?
+  defense_stars        Int?
+  pitching_rating      Int?
+  pitching_stars       Int?
 
   @@id(fields: [player_id, valid_from])
   @@map("players_info_expanded_all")
@@ -286,43 +286,47 @@ model Player {
 
 // @View - Must be manually updated with every new Prisma introspection
 model Team {
-  team_id               String
-  location              String
-  nickname              String
-  full_name             String
-  team_abbreviation     String?
-  url_slug              String
-  current_team_status   String
-  valid_from            DateTime
-  valid_until           DateTime?
-  gameday_from          Int?
-  season_from           Int?
-  division              String?
-  division_id           String?
-  league                String?
-  league_id             String?
-  tournament_name       String?
-  modifications          String[]
-  team_main_color       String?
-  team_secondary_color  String?
-  team_slogan           String?
-  team_emoji            String?
+  team_id              String
+  location             String
+  nickname             String
+  full_name            String
+  team_abbreviation    String?
+  url_slug             String
+  current_team_status  String
+  valid_from           DateTime
+  valid_until          DateTime?
+  gameday_from         Int?
+  season_from          Int?
+  division             String?
+  division_id          String?
+  league               String?
+  league_id            String?
+  tournament_name      String?
+  modifications        String[]
+  team_main_color      String?
+  team_secondary_color String?
+  team_slogan          String?
+  team_emoji           String?
 
+  PlayerBattingStatsSeason      PlayerBattingStatsSeason[]
+  PlayerBattingStatsPostseason  PlayerBattingStatsPostseason[]
+  PlayerPitchingStatsSeason     PlayerPitchingStatsSeason[]
+  PlayerPitchingStatsPostseason PlayerPitchingStatsPostseason[]
   @@id(fields: [team_id, valid_from])
   @@map("teams_info_expanded_all")
 }
 
 // @View - Must be manually updated with every new Prisma introspection
 model CurrentTeamRoster {
-  valid_from      DateTime
-  gameday_from    Int
-  season_from     Int
-  team_id         String
-  nickname        String
-  player_id       String    @id
-  player_name     String
-  position_type   String
-  position_id     Int
+  valid_from    DateTime
+  gameday_from  Int
+  season_from   Int
+  team_id       String
+  nickname      String
+  player_id     String   @id
+  player_name   String
+  position_type String
+  position_id   Int
 
   @@map("rosters_current")
 }
@@ -331,40 +335,41 @@ model CurrentTeamRoster {
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerBattingStatsSeason {
-  player_id             String
-  player_name           String
-  team_id               String
-  team_valid_from       DateTime
-  team_valid_until      DateTime?
-  season                Int
-  batting_average       Float?
-  on_base_percentage    Float?
-  slugging              Float?
-  plate_appearances     Int
-  at_bats               Int
-  hits                  Int
-  walks                 Int
-  singles               Int
-  doubles               Int
-  triples               Int
-  quadruples            Int
-  home_runs             Int
-  runs_batted_in        Int
-  strikeouts            Int
-  sacrifice_bunts        Int
-  sacrifice_flies         Int
-  at_bats_risp          Int
-  hits_risp             Int
-  batting_average_risp  Float?
-  on_base_slugging      Float?
-  total_bases           Int
-  hit_by_pitches        Int
-  ground_outs           Int
-  flyouts               Int
-  gidp                  Int
+  player_id            String
+  player_name          String
+  team_id              String
+  team_valid_from      DateTime
+  team_valid_until     DateTime?
+  season               Int
+  batting_average      Float?
+  on_base_percentage   Float?
+  slugging             Float?
+  appearances          Int
+  plate_appearances    Int
+  at_bats              Int
+  hits                 Int
+  walks                Int
+  singles              Int
+  doubles              Int
+  triples              Int
+  quadruples           Int
+  home_runs            Int
+  runs_batted_in       Int
+  strikeouts           Int
+  sacrifice_bunts      Int
+  sacrifice_flies      Int
+  at_bats_risp         Int
+  hits_risp            Int
+  batting_average_risp Float?
+  on_base_slugging     Float?
+  total_bases          Int
+  hit_by_pitches       Int
+  ground_outs          Int
+  flyouts              Int
+  gidp                 Int
 
-  runningStats          PlayerRunningStatsSeason?
-  team                  Team                      @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
+  runningStats PlayerRunningStatsSeason?
+  team         Team                      @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
 
   @@id(fields: [player_id, season])
   @@map("batting_stats_player_season")
@@ -372,40 +377,41 @@ model PlayerBattingStatsSeason {
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerBattingStatsPostseason {
-  player_id             String
-  player_name           String
-  team_id               String
-  team_valid_from       DateTime
-  team_valid_until      DateTime?
-  season                Int
-  batting_average       Float?
-  on_base_percentage    Float?
-  slugging              Float?
-  plate_appearances     Int
-  at_bats               Int
-  hits                  Int
-  walks                 Int
-  singles               Int
-  doubles               Int
-  triples               Int
-  quadruples            Int
-  home_runs             Int
-  runs_batted_in        Int
-  strikeouts            Int
-  sacrifice_bunts        Int
-  sacrifice_flies         Int
-  at_bats_risp          Int
-  hits_risp             Int
-  batting_average_risp  Float?
-  on_base_slugging      Float?
-  total_bases           Int
-  hit_by_pitches        Int
-  ground_outs           Int
-  flyouts               Int
-  gidp                  Int
+  player_id            String
+  player_name          String
+  team_id              String
+  team_valid_from      DateTime
+  team_valid_until     DateTime?
+  season               Int
+  batting_average      Float?
+  on_base_percentage   Float?
+  slugging             Float?
+  appearances          Int
+  plate_appearances    Int
+  at_bats              Int
+  hits                 Int
+  walks                Int
+  singles              Int
+  doubles              Int
+  triples              Int
+  quadruples           Int
+  home_runs            Int
+  runs_batted_in       Int
+  strikeouts           Int
+  sacrifice_bunts      Int
+  sacrifice_flies      Int
+  at_bats_risp         Int
+  hits_risp            Int
+  batting_average_risp Float?
+  on_base_slugging     Float?
+  total_bases          Int
+  hit_by_pitches       Int
+  ground_outs          Int
+  flyouts              Int
+  gidp                 Int
 
-  runningStats          PlayerRunningStatsPostseason?
-  team                  Team                      @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
+  runningStats PlayerRunningStatsPostseason?
+  team         Team                          @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
 
   @@id(fields: [player_id, season])
   @@map("batting_stats_player_playoffs_season")
@@ -413,35 +419,36 @@ model PlayerBattingStatsPostseason {
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerBattingStatsLifetime {
-  player_id             String
-  player_name           String
-  batting_average       Float?
-  on_base_percentage    Float?
-  slugging              Float?
-  plate_appearances     Int
-  at_bats               Int
-  hits                  Int
-  walks                 Int
-  singles               Int
-  doubles               Int
-  triples               Int
-  quadruples            Int
-  home_runs             Int
-  runs_batted_in        Int
-  strikeouts            Int
-  sacrifice_bunts        Int
-  sacrifice_flies         Int
-  at_bats_risp          Int
-  hits_risp             Int
-  batting_average_risp  Float?
-  on_base_slugging      Float?
-  total_bases           Int
-  hit_by_pitches        Int
-  ground_outs           Int
-  flyouts               Int
-  gidp                  Int
+  player_id            String
+  player_name          String
+  batting_average      Float?
+  on_base_percentage   Float?
+  slugging             Float?
+  appearances          Int
+  plate_appearances    Int
+  at_bats              Int
+  hits                 Int
+  walks                Int
+  singles              Int
+  doubles              Int
+  triples              Int
+  quadruples           Int
+  home_runs            Int
+  runs_batted_in       Int
+  strikeouts           Int
+  sacrifice_bunts      Int
+  sacrifice_flies      Int
+  at_bats_risp         Int
+  hits_risp            Int
+  batting_average_risp Float?
+  on_base_slugging     Float?
+  total_bases          Int
+  hit_by_pitches       Int
+  ground_outs          Int
+  flyouts              Int
+  gidp                 Int
 
-  runningStats          PlayerRunningStatsLifetime?
+  runningStats PlayerRunningStatsLifetime?
 
   @@id(fields: [player_id])
   @@map("batting_stats_player_lifetime")
@@ -449,35 +456,36 @@ model PlayerBattingStatsLifetime {
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerBattingStatsPostseasonLifetime {
-  player_id             String
-  player_name           String
-  batting_average       Float?
-  on_base_percentage    Float?
-  slugging              Float?
-  plate_appearances     Int
-  at_bats               Int
-  hits                  Int
-  walks                 Int
-  singles               Int
-  doubles               Int
-  triples               Int
-  quadruples            Int
-  home_runs             Int
-  runs_batted_in        Int
-  strikeouts            Int
-  sacrifice_bunts        Int
-  sacrifice_flies         Int
-  at_bats_risp          Int
-  hits_risp             Int
-  batting_average_risp  Float?
-  on_base_slugging      Float?
-  total_bases           Int
-  hit_by_pitches        Int
-  ground_outs           Int
-  flyouts               Int
-  gidp                  Int
+  player_id            String
+  player_name          String
+  batting_average      Float?
+  on_base_percentage   Float?
+  slugging             Float?
+  appearances          Int
+  plate_appearances    Int
+  at_bats              Int
+  hits                 Int
+  walks                Int
+  singles              Int
+  doubles              Int
+  triples              Int
+  quadruples           Int
+  home_runs            Int
+  runs_batted_in       Int
+  strikeouts           Int
+  sacrifice_bunts      Int
+  sacrifice_flies      Int
+  at_bats_risp         Int
+  hits_risp            Int
+  batting_average_risp Float?
+  on_base_slugging     Float?
+  total_bases          Int
+  hit_by_pitches       Int
+  ground_outs          Int
+  flyouts              Int
+  gidp                 Int
 
-  runningStats          PlayerRunningStatsPostseasonLifetime?
+  runningStats PlayerRunningStatsPostseasonLifetime?
 
   @@id(fields: [player_id])
   @@map("batting_stats_player_playoffs_lifetime")
@@ -487,37 +495,37 @@ model PlayerBattingStatsPostseasonLifetime {
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerPitchingStatsSeason {
-  player_id             String
-  player_name           String
-  season                Int
-  team_id               String
-  team_valid_from       DateTime
-  team_valid_until      DateTime?
-  games                 Int
-  wins                  Int
-  losses                Int
-  win_pct               Float
-  pitches_thrown        Int
-  batters_faced         Int
-  outs_recorded         Int
-  innings               Int
-  runs_allowed          Int
-  shutouts              Int
-  quality_starts        Int
-  strikeouts            Int
-  walks                 Int
-  home_runs_allowed     Int
-  hits_allowed          Int
-  hit_by_pitches        Float
-  earned_run_average    Float
-  walks_per_9           Float
-  hits_per_9            Float
-  strikeouts_per_9      Float
-  home_runs_per_9       Float
-  whip                  Float
-  strikeouts_per_walk   Float
+  player_id           String
+  player_name         String
+  season              Int
+  team_id             String
+  team_valid_from     DateTime
+  team_valid_until    DateTime?
+  games               Int
+  wins                Int
+  losses              Int
+  win_pct             Float
+  pitches_thrown      Int
+  batters_faced       Int
+  outs_recorded       Int
+  innings             Int
+  runs_allowed        Int
+  shutouts            Int
+  quality_starts      Int
+  strikeouts          Int
+  walks               Int
+  home_runs_allowed   Int
+  hits_allowed        Int
+  hit_by_pitches      Float
+  earned_run_average  Float
+  walks_per_9         Float
+  hits_per_9          Float
+  strikeouts_per_9    Float
+  home_runs_per_9     Float
+  whip                Float
+  strikeouts_per_walk Float
 
-  team                  Team  @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
+  team Team @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
 
   @@id(fields: [player_id, season])
   @@map("pitching_stats_player_season")
@@ -527,37 +535,37 @@ model PlayerPitchingStatsSeason {
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerPitchingStatsPostseason {
-  player_id             String
-  player_name           String
-  season                Int
-  team_id               String
-  team_valid_from       DateTime
-  team_valid_until      DateTime?
-  games                 Int
-  wins                  Int
-  losses                Int
-  win_pct               Float
-  pitches_thrown        Int
-  batters_faced         Int
-  outs_recorded         Int
-  innings               Int
-  runs_allowed          Int
-  shutouts              Int
-  quality_starts        Int
-  strikeouts            Int
-  walks                 Int
-  home_runs_allowed     Int
-  hits_allowed          Int
-  hit_by_pitches        Float
-  earned_run_average    Float
-  walks_per_9           Float
-  hits_per_9            Float
-  strikeouts_per_9      Float
-  home_runs_per_9       Float
-  whip                  Float
-  strikeouts_per_walk   Float
+  player_id           String
+  player_name         String
+  season              Int
+  team_id             String
+  team_valid_from     DateTime
+  team_valid_until    DateTime?
+  games               Int
+  wins                Int
+  losses              Int
+  win_pct             Float
+  pitches_thrown      Int
+  batters_faced       Int
+  outs_recorded       Int
+  innings             Int
+  runs_allowed        Int
+  shutouts            Int
+  quality_starts      Int
+  strikeouts          Int
+  walks               Int
+  home_runs_allowed   Int
+  hits_allowed        Int
+  hit_by_pitches      Float
+  earned_run_average  Float
+  walks_per_9         Float
+  hits_per_9          Float
+  strikeouts_per_9    Float
+  home_runs_per_9     Float
+  whip                Float
+  strikeouts_per_walk Float
 
-  team                  Team  @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
+  team Team @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
 
   @@id(fields: [player_id, season])
   @@map("pitching_stats_player_playoffs_season")
@@ -565,31 +573,31 @@ model PlayerPitchingStatsPostseason {
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerPitchingStatsLifetime {
-  player_id             String
-  player_name           String
-  games                 Int
-  wins                  Int
-  losses                Int
-  win_pct               Float
-  pitches_thrown        Int
-  batters_faced         Int
-  outs_recorded         Int
-  innings               Int
-  runs_allowed          Int
-  shutouts              Int
-  quality_starts        Int
-  strikeouts            Int
-  walks                 Int
-  home_runs_allowed     Int
-  hits_allowed          Int
-  hit_by_pitches        Float
-  earned_run_average    Float
-  walks_per_9           Float
-  hits_per_9            Float
-  strikeouts_per_9      Float
-  home_runs_per_9       Float
-  whip                  Float
-  strikeouts_per_walk   Float
+  player_id           String
+  player_name         String
+  games               Int
+  wins                Int
+  losses              Int
+  win_pct             Float
+  pitches_thrown      Int
+  batters_faced       Int
+  outs_recorded       Int
+  innings             Int
+  runs_allowed        Int
+  shutouts            Int
+  quality_starts      Int
+  strikeouts          Int
+  walks               Int
+  home_runs_allowed   Int
+  hits_allowed        Int
+  hit_by_pitches      Float
+  earned_run_average  Float
+  walks_per_9         Float
+  hits_per_9          Float
+  strikeouts_per_9    Float
+  home_runs_per_9     Float
+  whip                Float
+  strikeouts_per_walk Float
 
 
   @@id(fields: [player_id])
@@ -598,31 +606,31 @@ model PlayerPitchingStatsLifetime {
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerPitchingStatsPostseasonLifetime {
-  player_id             String
-  player_name           String
-  games                 Int
-  wins                  Int
-  losses                Int
-  win_pct               Float
-  pitches_thrown        Int
+  player_id           String
+  player_name         String
+  games               Int
+  wins                Int
+  losses              Int
+  win_pct             Float
+  pitches_thrown      Int
   // batters_faced         Int
-  outs_recorded         Int
-  innings               Int
-  runs_allowed          Int
-  shutouts              Int
-  quality_starts        Int
-  strikeouts            Int
-  walks                 Int
-  home_runs_allowed     Int
-  hits_allowed          Int
-  hit_by_pitches        Float
-  earned_run_average    Float
-  walks_per_9           Float
-  hits_per_9            Float
-  strikeouts_per_9      Float
-  home_runs_per_9       Float
-  whip                  Float
-  strikeouts_per_walk   Float
+  outs_recorded       Int
+  innings             Int
+  runs_allowed        Int
+  shutouts            Int
+  quality_starts      Int
+  strikeouts          Int
+  walks               Int
+  home_runs_allowed   Int
+  hits_allowed        Int
+  hit_by_pitches      Float
+  earned_run_average  Float
+  walks_per_9         Float
+  hits_per_9          Float
+  strikeouts_per_9    Float
+  home_runs_per_9     Float
+  whip                Float
+  strikeouts_per_walk Float
 
 
   @@id(fields: [player_id])
@@ -640,7 +648,7 @@ model PlayerRunningStatsSeason {
   caught_stealing Int
   runs            Int
 
-  battingStats    PlayerBattingStatsSeason  @relation(fields: [player_id, season], references: [player_id, season])
+  battingStats PlayerBattingStatsSeason @relation(fields: [player_id, season], references: [player_id, season])
 
   @@id(fields: [player_id, season])
   @@map("running_stats_player_season")
@@ -655,7 +663,7 @@ model PlayerRunningStatsPostseason {
   caught_stealing Int
   runs            Int
 
-  battingStats    PlayerBattingStatsPostseason  @relation(fields: [player_id, season], references: [player_id, season])
+  battingStats PlayerBattingStatsPostseason @relation(fields: [player_id, season], references: [player_id, season])
 
   @@id(fields: [player_id, season])
   @@map("running_stats_player_playoffs_season")
@@ -669,7 +677,7 @@ model PlayerRunningStatsLifetime {
   caught_stealing Int
   runs            Int
 
-  battingStats    PlayerBattingStatsLifetime  @relation(fields: [player_id], references: [player_id])
+  battingStats PlayerBattingStatsLifetime @relation(fields: [player_id], references: [player_id])
 
   @@id(fields: [player_id])
   @@map("running_stats_player_lifetime")
@@ -683,7 +691,7 @@ model PlayerRunningStatsPostseasonLifetime {
   caught_stealing Int
   runs            Int
 
-  battingStats    PlayerBattingStatsPostseasonLifetime  @relation(fields: [player_id], references: [player_id])
+  battingStats PlayerBattingStatsPostseasonLifetime @relation(fields: [player_id], references: [player_id])
 
   @@id(fields: [player_id])
   @@map("running_stats_player_playoffs_lifetime")
@@ -693,12 +701,12 @@ model PlayerRunningStatsPostseasonLifetime {
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerBattingLeaderboardsLifetime {
-  player_id       String
-  player_name     String
-  url_slug        String
-  value           Float
-  rank            Int
-  stat            String
+  player_id   String
+  player_name String
+  url_slug    String
+  value       Float
+  rank        Int
+  stat        String
 
   @@id(fields: [player_id])
   @@map("ref_leaderboard_lifetime_batting")
@@ -706,12 +714,12 @@ model PlayerBattingLeaderboardsLifetime {
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerPitchingLeaderboardsLifetime {
-  player_id       String
-  player_name     String
-  url_slug        String
-  value           Float
-  rank            Int
-  stat            String
+  player_id   String
+  player_name String
+  url_slug    String
+  value       Float
+  rank        Int
+  stat        String
 
   @@id(fields: [player_id])
   @@map("ref_leaderboard_lifetime_pitching")
