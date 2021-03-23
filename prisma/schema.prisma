@@ -508,8 +508,8 @@ model PlayerPitchingStatsSeason {
   pitches_thrown      Int
   batters_faced       Int
   outs_recorded       Int
-  innings             Int
-  runs_allowed        Int
+  innings             Float
+  runs_allowed        Float
   shutouts            Int
   quality_starts      Int
   strikeouts          Int
@@ -548,8 +548,8 @@ model PlayerPitchingStatsPostseason {
   pitches_thrown      Int
   batters_faced       Int
   outs_recorded       Int
-  innings             Int
-  runs_allowed        Int
+  innings             Float
+  runs_allowed        Float
   shutouts            Int
   quality_starts      Int
   strikeouts          Int
@@ -582,8 +582,8 @@ model PlayerPitchingStatsLifetime {
   pitches_thrown      Int
   batters_faced       Int
   outs_recorded       Int
-  innings             Int
-  runs_allowed        Int
+  innings             Float
+  runs_allowed        Float
   shutouts            Int
   quality_starts      Int
   strikeouts          Int
@@ -598,7 +598,6 @@ model PlayerPitchingStatsLifetime {
   home_runs_per_9     Float
   whip                Float
   strikeouts_per_walk Float
-
 
   @@id(fields: [player_id])
   @@map("pitching_stats_player_lifetime")
@@ -615,8 +614,8 @@ model PlayerPitchingStatsPostseasonLifetime {
   pitches_thrown      Int
   // batters_faced         Int
   outs_recorded       Int
-  innings             Int
-  runs_allowed        Int
+  innings             Float
+  runs_allowed        Float
   shutouts            Int
   quality_starts      Int
   strikeouts          Int
@@ -631,7 +630,6 @@ model PlayerPitchingStatsPostseasonLifetime {
   home_runs_per_9     Float
   whip                Float
   strikeouts_per_walk Float
-
 
   @@id(fields: [player_id])
   @@map("pitching_stats_player_playoffs_lifetime")
