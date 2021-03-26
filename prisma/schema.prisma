@@ -341,6 +341,7 @@ model PlayerBattingStatsSeason {
   team_valid_from      DateTime
   team_valid_until     DateTime?
   season               Int
+  first_appearance     Int
   batting_average      Float?
   on_base_percentage   Float?
   slugging             Float?
@@ -644,7 +645,7 @@ model PlayerRunningStatsSeason {
   season          Int
   stolen_bases    Int
   caught_stealing Int
-  runs            Int
+  runs            Float
 
   battingStats PlayerBattingStatsSeason @relation(fields: [player_id, season], references: [player_id, season])
 
@@ -659,7 +660,7 @@ model PlayerRunningStatsPostseason {
   season          Int
   stolen_bases    Int
   caught_stealing Int
-  runs            Int
+  runs            Float
 
   battingStats PlayerBattingStatsPostseason @relation(fields: [player_id, season], references: [player_id, season])
 
@@ -673,7 +674,7 @@ model PlayerRunningStatsLifetime {
   player_name     String
   stolen_bases    Int
   caught_stealing Int
-  runs            Int
+  runs            Float
 
   battingStats PlayerBattingStatsLifetime @relation(fields: [player_id], references: [player_id])
 
@@ -687,7 +688,7 @@ model PlayerRunningStatsPostseasonLifetime {
   player_name     String
   stolen_bases    Int
   caught_stealing Int
-  runs            Int
+  runs            Float
 
   battingStats PlayerBattingStatsPostseasonLifetime @relation(fields: [player_id], references: [player_id])
 
