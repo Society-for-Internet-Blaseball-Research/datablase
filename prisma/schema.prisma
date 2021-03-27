@@ -372,7 +372,7 @@ model PlayerBattingStatsSeason {
   runningStats PlayerRunningStatsSeason?
   team         Team                      @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
 
-  @@id(fields: [player_id, season])
+  @@id(fields: [player_id, season, team_id])
   @@map("batting_stats_player_season")
 }
 
@@ -414,7 +414,7 @@ model PlayerBattingStatsPostseason {
   runningStats PlayerRunningStatsPostseason?
   team         Team                          @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
 
-  @@id(fields: [player_id, season])
+  @@id(fields: [player_id, season, team_id])
   @@map("batting_stats_player_playoffs_season")
 }
 
@@ -528,7 +528,7 @@ model PlayerPitchingStatsSeason {
 
   team Team @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
 
-  @@id(fields: [player_id, season])
+  @@id(fields: [player_id, season, team_id])
   @@map("pitching_stats_player_season")
 }
 
@@ -568,7 +568,7 @@ model PlayerPitchingStatsPostseason {
 
   team Team @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
 
-  @@id(fields: [player_id, season])
+  @@id(fields: [player_id, season, team_id])
   @@map("pitching_stats_player_playoffs_season")
 }
 
@@ -613,7 +613,7 @@ model PlayerPitchingStatsPostseasonLifetime {
   losses              Int
   win_pct             Float
   pitches_thrown      Int
-  // batters_faced         Int
+  batters_faced       Int
   outs_recorded       Int
   innings             Float
   runs_allowed        Float
@@ -640,31 +640,39 @@ model PlayerPitchingStatsPostseasonLifetime {
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerRunningStatsSeason {
-  player_id       String
-  player_name     String
-  season          Int
-  stolen_bases    Int
-  caught_stealing Int
-  runs            Float
+  player_id        String
+  player_name      String
+  team             String
+  team_id          String
+  team_valid_from  DateTime
+  team_valid_until DateTime?
+  season           Int
+  stolen_bases     Int
+  caught_stealing  Int
+  runs             Float
 
-  battingStats PlayerBattingStatsSeason @relation(fields: [player_id, season], references: [player_id, season])
+  battingStats PlayerBattingStatsSeason @relation(fields: [player_id, season, team_id], references: [player_id, season, team_id])
 
-  @@id(fields: [player_id, season])
+  @@id(fields: [player_id, season, team_id])
   @@map("running_stats_player_season")
 }
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerRunningStatsPostseason {
-  player_id       String
-  player_name     String
-  season          Int
-  stolen_bases    Int
-  caught_stealing Int
-  runs            Float
+  player_id        String
+  player_name      String
+  team             String
+  team_id          String
+  team_valid_from  DateTime
+  team_valid_until DateTime?
+  season           Int
+  stolen_bases     Int
+  caught_stealing  Int
+  runs             Float
 
-  battingStats PlayerBattingStatsPostseason @relation(fields: [player_id, season], references: [player_id, season])
+  battingStats PlayerBattingStatsPostseason @relation(fields: [player_id, season, team_id], references: [player_id, season, team_id])
 
-  @@id(fields: [player_id, season])
+  @@id(fields: [player_id, season, team_id])
   @@map("running_stats_player_playoffs_season")
 }
 
