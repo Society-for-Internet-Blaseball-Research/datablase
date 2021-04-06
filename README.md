@@ -16,7 +16,6 @@ API docs are updated.
 Datablase requires some environmental variables to be set. A list of these variables can be found below. They can be set manually, or placed in a `.env` file.
 
 ```
-SIBR_PRODUCTION=0
 SIBR_API_SCHEME=http
 PGUSER=dbuser
 PGHOST=database.server.com
