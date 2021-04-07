@@ -271,14 +271,14 @@ model Player {
   team_abbreviation    String?
   team_id              String?
   modifications        String[]
-  baserunning_rating   Int?
-  baserunning_stars    Int?
-  batting_rating       Int?
-  batting_stars        Int?
-  defense_rating       Int?
-  defense_stars        Int?
-  pitching_rating      Int?
-  pitching_stars       Int?
+  baserunning_rating   Float?
+  baserunning_stars    Float?
+  batting_rating       Float?
+  batting_stars        Float?
+  defense_rating       Float?
+  defense_stars        Float?
+  pitching_rating      Float?
+  pitching_stars       Float?
 
   @@id(fields: [player_id, valid_from])
   @@map("players_info_expanded_all")
