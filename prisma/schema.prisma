@@ -355,7 +355,7 @@ model PlayerBattingStatsSeason {
   triples              Int
   quadruples           Int
   home_runs            Int
-  runs_batted_in       Int
+  runs_batted_in       Float
   strikeouts           Int
   sacrifice_bunts      Int
   sacrifice_flies      Int
@@ -397,7 +397,7 @@ model PlayerBattingStatsPostseason {
   triples              Int
   quadruples           Int
   home_runs            Int
-  runs_batted_in       Int
+  runs_batted_in       Float
   strikeouts           Int
   sacrifice_bunts      Int
   sacrifice_flies      Int
@@ -435,7 +435,7 @@ model PlayerBattingStatsLifetime {
   triples              Int
   quadruples           Int
   home_runs            Int
-  runs_batted_in       Int
+  runs_batted_in       Float
   strikeouts           Int
   sacrifice_bunts      Int
   sacrifice_flies      Int
@@ -472,7 +472,7 @@ model PlayerBattingStatsPostseasonLifetime {
   triples              Int
   quadruples           Int
   home_runs            Int
-  runs_batted_in       Int
+  runs_batted_in       Float
   strikeouts           Int
   sacrifice_bunts      Int
   sacrifice_flies      Int
