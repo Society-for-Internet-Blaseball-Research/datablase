@@ -642,9 +642,9 @@ model PlayerPitchingStatsPostseasonLifetime {
 model PlayerRunningStatsSeason {
   player_id        String
   player_name      String
-  team             String
+  team             String?
   team_id          String
-  team_valid_from  DateTime
+  team_valid_from  DateTime?
   team_valid_until DateTime?
   season           Int
   stolen_bases     Int
@@ -661,9 +661,9 @@ model PlayerRunningStatsSeason {
 model PlayerRunningStatsPostseason {
   player_id        String
   player_name      String
-  team             String
+  team             String?
   team_id          String
-  team_valid_from  DateTime
+  team_valid_from  DateTime?
   team_valid_until DateTime?
   season           Int
   stolen_bases     Int
