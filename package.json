@@ -1,6 +1,6 @@
 {
   "name": "sibr-api",
-  "version": "1.5.19",
+  "version": "1.5.20",
   "description": "API for SIBR statistics.",
   "main": "lib/index.js",
   "scripts": {
