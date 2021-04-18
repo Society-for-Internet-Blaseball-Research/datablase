@@ -1,6 +1,6 @@
 {
   "name": "sibr-api",
-  "version": "1.5.21",
+  "version": "1.5.22",
   "description": "API for SIBR statistics.",
   "main": "lib/index.js",
   "scripts": {
@@ -14,26 +14,26 @@
   "dependencies": {
     "@appsignal/express": "^1.0.9",
     "@appsignal/nodejs": "^1.2.2",
-    "@prisma/client": "^2.20.1",
-    "core-js": "^3.10.0",
+    "@prisma/client": "^2.21.2",
+    "core-js": "^3.10.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
     "express-swagger-generator": "^1.1.17",
-    "pg": "^8.3.3",
+    "pg": "^8.6.0",
     "regenerator-runtime": "^0.13.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.14",
-    "@babel/core": "^7.13.14",
+    "@babel/core": "^7.13.15",
     "@babel/node": "^7.13.13",
-    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-env": "^7.13.15",
     "husky": "4",
     "lint-staged": ">=10",
     "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
-    "prisma": "^2.20.1"
+    "prisma": "^2.21.2"
   },
   "husky": {
     "hooks": {
