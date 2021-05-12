@@ -630,7 +630,7 @@ model PlayerPitchingStatsSeason {
   games               Int
   wins                Int
   losses              Int
-  win_pct             Float
+  win_pct             Float?
   pitches_thrown      Int
   batters_faced       Int
   outs_recorded       Int
@@ -665,7 +665,7 @@ model PlayerPitchingStatsSeasonCombined {
   games               Int
   wins                Int
   losses              Int
-  win_pct             Float
+  win_pct             Float?
   pitches_thrown      Int
   batters_faced       Int
   outs_recorded       Int
@@ -701,7 +701,7 @@ model PlayerPitchingStatsPostseason {
   games               Int
   wins                Int
   losses              Int
-  win_pct             Float
+  win_pct             Float?
   pitches_thrown      Int
   batters_faced       Int
   outs_recorded       Int
@@ -735,7 +735,7 @@ model PlayerPitchingStatsLifetime {
   games               Int
   wins                Int
   losses              Int
-  win_pct             Float
+  win_pct             Float?
   pitches_thrown      Int
   batters_faced       Int
   outs_recorded       Int
@@ -767,7 +767,7 @@ model PlayerPitchingStatsPostseasonLifetime {
   games               Int
   wins                Int
   losses              Int
-  win_pct             Float
+  win_pct             Float?
   pitches_thrown      Int
   batters_faced       Int
   outs_recorded       Int
@@ -801,7 +801,7 @@ model TeamPitchingStatsSeason {
   games               Int
   wins                Int
   losses              Int
-  win_pct             Float
+  win_pct             Float?
   pitches_thrown      Int
   batters_faced       Int
   outs_recorded       Int
@@ -837,7 +837,7 @@ model TeamPitchingStatsPostseason {
   games               Int
   wins                Int
   losses              Int
-  win_pct             Float
+  win_pct             Float?
   pitches_thrown      Int
   batters_faced       Int
   outs_recorded       Int
