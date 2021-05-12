@@ -1,6 +1,6 @@
 {
   "name": "sibr-api",
-  "version": "1.5.23",
+  "version": "1.5.24",
   "description": "API for SIBR statistics.",
   "main": "lib/index.js",
   "scripts": {
@@ -26,9 +26,9 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.13.16",
-    "@babel/core": "^7.14.0",
-    "@babel/node": "^7.13.13",
-    "@babel/preset-env": "^7.14.1",
+    "@babel/core": "^7.14.2",
+    "@babel/node": "^7.14.2",
+    "@babel/preset-env": "^7.14.2",
     "husky": "4",
     "lint-staged": ">=10",
     "nodemon": "^2.0.7",
