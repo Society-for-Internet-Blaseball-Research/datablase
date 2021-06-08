@@ -253,32 +253,40 @@ model Player {
   blood            String?
   url_slug         String?
 
-  current_state        String?
-  current_location     String?
-  debut_gameday        Int?
-  debut_season         Int?
-  debut_tournament     Int?
-  incineration_season  Int?
-  incineration_gameday Int?
-  incineration_phase   String?
-  gameday_from         Int?
-  season_from          Int?
-  tournament_from      Int?
-  phase_type_from      String?
-  position_id          Int?
-  position_type        String?
-  team                 String?
-  team_abbreviation    String?
-  team_id              String?
-  modifications        String[]
-  baserunning_rating   Float?
-  baserunning_stars    Float?
-  batting_rating       Float?
-  batting_stars        Float?
-  defense_rating       Float?
-  defense_stars        Float?
-  pitching_rating      Float?
-  pitching_stars       Float?
+  evolution               Float?
+  current_state           String?
+  current_location        String?
+  debut_gameday           Int?
+  debut_season            Int?
+  debut_tournament        Int?
+  incineration_season     Int?
+  incineration_gameday    Int?
+  incineration_phase      String?
+  gameday_from            Int?
+  season_from             Int?
+  tournament_from         Int?
+  phase_type_from         String?
+  position_id             Int?
+  position_type           String?
+  team                    String?
+  team_abbreviation       String?
+  team_id                 String?
+  modifications           String[]
+  baserunning_rating      Float?
+  baserunning_stars       Float?
+  batting_rating          Float?
+  batting_stars           Float?
+  defense_rating          Float?
+  defense_stars           Float?
+  pitching_rating         Float?
+  pitching_stars          Float?
+  items                   String[]
+  durabilities            Float[]
+  healths                 Float[]
+  item_batting_rating     Float?
+  item_defense_rating     Float?
+  item_baserunning_rating Float?
+  item_pitching_rating    Float?
 
   @@id(fields: [player_id, valid_from])
   @@map("players_info_expanded_all")
@@ -307,6 +315,9 @@ model Team {
   team_secondary_color String?
   team_slogan          String?
   team_emoji           String?
+  stadium_id           String?
+  stadium_name         String?
+  stadium_nickname     String?
 
   PlayerBattingStatsSeason      PlayerBattingStatsSeason[]
   PlayerBattingStatsPostseason  PlayerBattingStatsPostseason[]
@@ -887,12 +898,12 @@ model PlayerRunningStatsSeason {
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerRunningStatsSeasonCombined {
-  player_id        String
-  player_name      String
-  season           Int
-  stolen_bases     Int
-  caught_stealing  Int
-  runs             Float
+  player_id       String
+  player_name     String
+  season          Int
+  stolen_bases    Int
+  caught_stealing Int
+  runs            Float
 
   battingStats PlayerBattingStatsSeasonCombined @relation(fields: [player_id, season], references: [player_id, season])
 
