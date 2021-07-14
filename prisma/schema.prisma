@@ -139,6 +139,7 @@ model Game {
   statsheet_id           String?
   winning_pitcher_id     String?
   losing_pitcher_id      String?
+  outcomes               String[]
   game_events            GameEvent[]
 
   @@map("games")
@@ -319,8 +320,10 @@ model Team {
   stadium_name         String?
   stadium_nickname     String?
 
+  PlayerBattingStatsGame        PlayerBattingStatsGame[]
   PlayerBattingStatsSeason      PlayerBattingStatsSeason[]
   PlayerBattingStatsPostseason  PlayerBattingStatsPostseason[]
+  PlayerPitchingStatsGame       PlayerPitchingStatsGame[]
   PlayerPitchingStatsSeason     PlayerPitchingStatsSeason[]
   PlayerPitchingStatsPostseason PlayerPitchingStatsPostseason[]
 
@@ -349,6 +352,49 @@ model CurrentTeamRoster {
 }
 
 // Batting Stats
+
+// @View - Must be manually updated with every new Prisma introspection
+model PlayerBattingStatsGame {
+  game_id              String
+  player_id            String
+  player_name          String
+  team_id              String
+  team_valid_from      DateTime
+  team_valid_until     DateTime?
+  season               Int
+  day                  Int
+  batting_average      Float?
+  on_base_percentage   Float?
+  slugging             Float?
+  plate_appearances    Int
+  at_bats              Int
+  hits                 Int
+  walks                Int
+  singles              Int
+  doubles              Int
+  triples              Int
+  quadruples           Int
+  home_runs            Int
+  runs_batted_in       Float
+  strikeouts           Int
+  sacrifice_bunts      Int
+  sacrifice_flies      Int
+  at_bats_risp         Int
+  hits_risp            Int
+  batting_average_risp Float?
+  on_base_slugging     Float?
+  total_bases          Int
+  hit_by_pitches       Int
+  ground_outs          Int
+  flyouts              Int
+  gidp                 Int
+
+  runningStats PlayerRunningStatsGame?
+  team         Team                    @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
+
+  @@id(fields: [game_id, player_id, team_id])
+  @@map("batting_stats_player_single_game")
+}
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerBattingStatsSeason {
@@ -631,6 +677,46 @@ model TeamBattingStatsPostseason {
 // Pitching Stats
 
 // @View - Must be manually updated with every new Prisma introspection
+model PlayerPitchingStatsGame {
+  game_id           String
+  player_id         String
+  player_name       String
+  season            Int
+  day               Int
+  team_id           String
+  team_valid_from   DateTime
+  team_valid_until  DateTime?
+  wins              Int       @map("win")
+  losses            Int       @map("loss")
+  pitches_thrown    Int
+  top_of_inning     Boolean
+  batters_faced     Int
+  outs_recorded     Int
+  innings           Float
+  runs_allowed      Float
+  // shutouts            Int
+  // quality_starts      Int
+  strikeouts        Int
+  walks             Int
+  home_runs_allowed Int
+  hits_allowed      Int
+  hit_by_pitches    Float
+  // earned_run_average  Float
+  // walks_per_9         Float
+  // hits_per_9          Float
+  // strikeouts_per_9    Float
+  // home_runs_per_9     Float
+  // whip                Float
+  // strikeouts_per_walk Float
+  weather_id        Int
+
+  team Team @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
+
+  @@id(fields: [game_id, player_id, team_id])
+  @@map("pitching_stats_all_appearances")
+}
+
+// @View - Must be manually updated with every new Prisma introspection
 model PlayerPitchingStatsSeason {
   player_id           String
   player_name         String
@@ -876,6 +962,27 @@ model TeamPitchingStatsPostseason {
 }
 
 // Base Running Stats
+
+// // @View - Must be manually updated with every new Prisma introspection
+model PlayerRunningStatsGame {
+  game_id          String
+  player_id        String
+  player_name      String
+  team             String?
+  team_id          String
+  team_valid_from  DateTime
+  team_valid_until DateTime?
+  season           Int
+  day              Int
+  stolen_bases     Int
+  caught_stealing  Int
+  runs             Float
+
+  battingStats PlayerBattingStatsGame @relation(fields: [game_id, player_id, team_id], references: [game_id, player_id, team_id])
+
+  @@id(fields: [game_id, player_id, team_id])
+  @@map("running_stats_player_single_game")
+}
 
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerRunningStatsSeason {
