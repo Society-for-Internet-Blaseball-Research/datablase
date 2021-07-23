@@ -301,7 +301,7 @@ model Team {
   full_name            String
   team_abbreviation    String?
   url_slug             String
-  team_current_status  String
+  team_current_status  String?
   valid_from           DateTime
   valid_until          DateTime?
   gameday_from         Int?
