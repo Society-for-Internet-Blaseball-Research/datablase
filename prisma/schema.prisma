@@ -9,14 +9,14 @@ datasource db {
 
 model AppliedPatches {
   patch_id   Int     @id @default(autoincrement())
-  patch_hash String?
+  patch_hash String? @db.Uuid
 
   @@map("applied_patches")
 }
 
 model ChroniclerHashGameEvent {
   chronicler_hash_game_event_id Int        @id @default(autoincrement())
-  update_hash                   String?
+  update_hash                   String?    @db.Uuid
   game_event_id                 Int?
   game_events                   GameEvent? @relation(fields: [game_event_id], references: [id])
 
@@ -25,12 +25,14 @@ model ChroniclerHashGameEvent {
 }
 
 model ChroniclerMeta {
-  id               Int       @id
-  season           Float
-  day              Float
-  game_timestamp   DateTime?
-  team_timestamp   DateTime?
-  player_timestamp DateTime?
+  id                 Int       @id @db.SmallInt
+  season             Decimal   @db.Decimal
+  day                Decimal   @db.Decimal
+  game_timestamp     DateTime? @db.Timestamp(6)
+  team_timestamp     DateTime? @db.Timestamp(6)
+  player_timestamp   DateTime? @db.Timestamp(6)
+  division_timestamp DateTime? @db.Timestamp(6)
+  stadium_timestamp  DateTime? @db.Timestamp(6)
 
   @@map("chronicler_meta")
 }
@@ -38,15 +40,15 @@ model ChroniclerMeta {
 model GameEventBaseRunner {
   id                     Int        @id @default(autoincrement())
   game_event_id          Int?
-  runner_id              String?
-  responsible_pitcher_id String?
+  runner_id              String?    @db.VarChar(36)
+  responsible_pitcher_id String?    @db.VarChar(36)
   base_before_play       Int?
   base_after_play        Int?
   was_base_stolen        Boolean?
   was_caught_stealing    Boolean?
   was_picked_off         Boolean?
   runner_scored          Boolean?   @default(false)
-  runs_scored            Float?
+  runs_scored            Decimal?   @db.Decimal
   game_events            GameEvent? @relation(fields: [game_event_id], references: [id])
 
   @@map("game_event_base_runners")
@@ -54,42 +56,42 @@ model GameEventBaseRunner {
 
 model GameEvent {
   id                                 Int                       @id @default(autoincrement())
-  perceived_at                       DateTime?
-  game_id                            String?
+  perceived_at                       DateTime?                 @db.Timestamp(6)
+  game_id                            String?                   @db.VarChar(36)
   event_type                         String?
   event_index                        Int?
-  inning                             Int?
+  inning                             Int?                      @db.SmallInt
   top_of_inning                      Boolean?
-  outs_before_play                   Int?
-  batter_id                          String?
-  batter_team_id                     String?
-  pitcher_id                         String?
-  pitcher_team_id                    String?
-  home_score                         Float?
-  away_score                         Float?
+  outs_before_play                   Int?                      @db.SmallInt
+  batter_id                          String?                   @db.VarChar(36)
+  batter_team_id                     String?                   @db.VarChar(36)
+  pitcher_id                         String?                   @db.VarChar(36)
+  pitcher_team_id                    String?                   @db.VarChar(36)
+  home_score                         Decimal?                  @db.Decimal
+  away_score                         Decimal?                  @db.Decimal
   home_strike_count                  Int?                      @default(3)
   away_strike_count                  Int?                      @default(3)
   batter_count                       Int?
-  pitches                            String[]
-  total_strikes                      Int?
-  total_balls                        Int?
-  total_fouls                        Int?
+  pitches                            String[]                  @db.VarChar(1)
+  total_strikes                      Int?                      @db.SmallInt
+  total_balls                        Int?                      @db.SmallInt
+  total_fouls                        Int?                      @db.SmallInt
   is_leadoff                         Boolean?
   is_pinch_hit                       Boolean?
-  lineup_position                    Int?
+  lineup_position                    Int?                      @db.SmallInt
   is_last_event_for_plate_appearance Boolean?
-  bases_hit                          Int?
-  runs_batted_in                     Float?
+  bases_hit                          Int?                      @db.SmallInt
+  runs_batted_in                     Decimal?                  @db.Decimal
   is_sacrifice_hit                   Boolean?
   is_sacrifice_fly                   Boolean?
-  outs_on_play                       Int?
+  outs_on_play                       Int?                      @db.SmallInt
   is_double_play                     Boolean?
   is_triple_play                     Boolean?
   is_wild_pitch                      Boolean?
   batted_ball_type                   String?
   is_bunt                            Boolean?
-  errors_on_play                     Int?
-  batter_base_after_play             Int?
+  errors_on_play                     Int?                      @db.SmallInt
+  batter_base_after_play             Int?                      @db.SmallInt
   is_last_game_event                 Boolean?
   event_text                         String[]
   additional_context                 String?
@@ -104,6 +106,7 @@ model GameEvent {
   away_base_count                    Int?                      @default(4)
   home_base_count                    Int?                      @default(4)
   tournament                         Int?
+
   games                              Game?                     @relation(fields: [game_id], references: [game_id])
   chronicler_hash_game_event         ChroniclerHashGameEvent[]
   game_event_base_runners            GameEventBaseRunner[]
@@ -116,29 +119,30 @@ model GameEvent {
 }
 
 model Game {
-  game_id                String      @id
-  day                    Int
-  season                 Int
-  tournament             Int
+  game_id                String      @id @db.VarChar(36)
+  day                    Int?
+  season                 Int?
   last_game_event        Int?
-  home_odds              Float?
-  away_odds              Float?
+  home_odds              Decimal?    @db.Decimal
+  away_odds              Decimal?    @db.Decimal
   weather                Int?
   series_index           Int?
   series_length          Int?
   is_postseason          Boolean?
-  home_team              String?
-  away_team              String?
-  home_score             Float?
-  away_score             Float?
+  home_team              String?     @db.VarChar(36)
+  away_team              String?     @db.VarChar(36)
+  home_score             Decimal?    @db.Decimal
+  away_score             Decimal?    @db.Decimal
   number_of_innings      Int?
   ended_on_top_of_inning Boolean?
   ended_in_shame         Boolean?
-  terminology_id         String?
-  rules_id               String?
-  statsheet_id           String?
-  winning_pitcher_id     String?
-  losing_pitcher_id      String?
+  terminology_id         String?     @db.VarChar(36)
+  rules_id               String?     @db.VarChar(36)
+  statsheet_id           String?     @db.VarChar(36)
+  winning_pitcher_id     String?     @db.VarChar
+  losing_pitcher_id      String?     @db.VarChar
+  tournament             Int?
+  outcomes               String[]
   game_events            GameEvent[]
 
   @@map("games")
@@ -147,7 +151,7 @@ model Game {
 model ImportedLog {
   id          Int       @id @default(autoincrement())
   key         String?
-  imported_at DateTime?
+  imported_at DateTime? @db.Timestamp(6)
 
   @@map("imported_logs")
 }
@@ -155,7 +159,7 @@ model ImportedLog {
 model Outcome {
   id            Int        @id @default(autoincrement())
   game_event_id Int?
-  entity_id     String?
+  entity_id     String?    @db.VarChar(36)
   event_type    String?
   original_text String?
   game_events   GameEvent? @relation(fields: [game_event_id], references: [id])
@@ -165,10 +169,11 @@ model Outcome {
 
 model PlayerModification {
   player_modifications_id Int       @id @default(autoincrement())
-  player_id               String?
-  modification            String?
-  valid_from              DateTime?
-  valid_until             DateTime?
+  player_id               String?   @db.VarChar
+  modification            String?   @db.VarChar
+  valid_from              DateTime? @db.Timestamp(6)
+  valid_until             DateTime? @db.Timestamp(6)
+  tournament              Int?      @default(-1)
 
   @@index([player_id, valid_from, valid_until], name: "player_modifications_indx_player_id_timespan")
   @@map("player_modifications")
@@ -176,22 +181,23 @@ model PlayerModification {
 
 model TeamModification {
   team_modifications_id Int       @id @default(autoincrement())
-  team_id               String?
-  modification          String?
-  valid_from            DateTime?
-  valid_until           DateTime?
+  team_id               String?   @db.VarChar
+  modification          String?   @db.VarChar
+  valid_from            DateTime? @db.Timestamp(6)
+  valid_until           DateTime? @db.Timestamp(6)
 
   @@map("team_modifications")
 }
 
 model TeamRoster {
   team_roster_id   Int       @id @default(autoincrement())
-  team_id          String?
+  team_id          String?   @db.VarChar
   position_id      Int?
-  valid_from       DateTime?
-  valid_until      DateTime?
-  player_id        String?
-  position_type_id Float?
+  valid_from       DateTime? @db.Timestamp(6)
+  valid_until      DateTime? @db.Timestamp(6)
+  player_id        String?   @db.VarChar
+  position_type_id Decimal?  @db.Decimal
+  tournament       Int?      @default(-1)
 
   @@index([valid_until, team_id, position_id, position_type_id], name: "team_roster_idx")
   @@index([player_id, valid_from, valid_until], name: "team_roster_indx_player_id_timespan")
@@ -201,7 +207,7 @@ model TeamRoster {
 model TimeMap {
   season      Int
   day         Int
-  first_time  DateTime?
+  first_time  DateTime? @db.Timestamp(6)
   time_map_id Int       @id @default(autoincrement())
   phase_id    Int?
 
@@ -211,49 +217,53 @@ model TimeMap {
 
 // @View - Must be manually updated with every new Prisma introspection
 model Player {
-  player_id        String
-  player_name      String?
-  valid_from       DateTime
-  valid_until      DateTime?
-  deceased         Boolean?
-  anticapitalism   Float?
-  base_thirst      Float?
-  buoyancy         Float?
-  chasiness        Float?
-  coldness         Float?
-  continuation     Float?
-  divinity         Float?
-  ground_friction  Float?
-  indulgence       Float?
-  laserlikeness    Float?
-  martyrdom        Float?
-  moxie            Float?
-  musclitude       Float?
-  omniscience      Float?
-  overpowerment    Float?
-  patheticism      Float?
-  ruthlessness     Float?
-  shakespearianism Float?
-  suppression      Float?
-  tenaciousness    Float?
-  thwackability    Float?
-  tragicness       Float?
-  unthwackability  Float?
-  watchfulness     Float?
-  pressurization   Float?
-  cinnamon         Float?
-  total_fingers    Int?
-  soul             Int?
-  fate             Int?
-  peanut_allergy   Boolean?
-  armor            String?
-  bat              String?
-  ritual           String?
-  coffee           String?
-  blood            String?
-  url_slug         String?
+  player_id          String    @db.VarChar(36)
+  valid_from         DateTime  @db.Timestamp(6)
+  valid_until        DateTime? @db.Timestamp(6)
+  player_name        String?   @db.VarChar
+  deceased           Boolean?
+  anticapitalism     Decimal?  @db.Decimal
+  base_thirst        Decimal?  @db.Decimal
+  buoyancy           Decimal?  @db.Decimal
+  chasiness          Decimal?  @db.Decimal
+  coldness           Decimal?  @db.Decimal
+  continuation       Decimal?  @db.Decimal
+  divinity           Decimal?  @db.Decimal
+  ground_friction    Decimal?  @db.Decimal
+  indulgence         Decimal?  @db.Decimal
+  laserlikeness      Decimal?  @db.Decimal
+  martyrdom          Decimal?  @db.Decimal
+  moxie              Decimal?  @db.Decimal
+  musclitude         Decimal?  @db.Decimal
+  omniscience        Decimal?  @db.Decimal
+  overpowerment      Decimal?  @db.Decimal
+  patheticism        Decimal?  @db.Decimal
+  ruthlessness       Decimal?  @db.Decimal
+  shakespearianism   Decimal?  @db.Decimal
+  suppression        Decimal?  @db.Decimal
+  tenaciousness      Decimal?  @db.Decimal
+  thwackability      Decimal?  @db.Decimal
+  tragicness         Decimal?  @db.Decimal
+  unthwackability    Decimal?  @db.Decimal
+  watchfulness       Decimal?  @db.Decimal
+  pressurization     Decimal?  @db.Decimal
+  cinnamon           Decimal?  @db.Decimal
+  total_fingers      Int?      @db.SmallInt
+  soul               Int?      @db.SmallInt
+  fate               Int?      @db.SmallInt
+  peanut_allergy     Boolean?
+  armor              String?
+  bat                String?
+  ritual             String?
+  url_slug           String?   @db.VarChar
+  evolution          Int?      @default(0)
+  batting_rating     Decimal?  @default(-1) @db.Decimal
+  pitching_rating    Decimal?  @default(-1) @db.Decimal
+  baserunning_rating Decimal?  @default(-1) @db.Decimal
+  defense_rating     Decimal?  @default(-1) @db.Decimal
 
-  evolution               Float?
+  blood              String?
+  coffee             String?
   current_state           String?
   current_location        String?
   debut_gameday           Int?
@@ -272,13 +282,9 @@ model Player {
   team_abbreviation       String?
   team_id                 String?
   modifications           String[]
-  baserunning_rating      Float?
   baserunning_stars       Float?
-  batting_rating          Float?
   batting_stars           Float?
-  defense_rating          Float?
   defense_stars           Float?
-  pitching_rating         Float?
   pitching_stars          Float?
   items                   String[]
   durabilities            Float[]
@@ -294,33 +300,37 @@ model Player {
 
 // @View - Must be manually updated with every new Prisma introspection
 model Team {
-  team_id              String
+  team_id              String    @db.VarChar(36)
   location             String
   nickname             String
   full_name            String
-  team_abbreviation    String?
-  url_slug             String
-  team_current_status  String
-  valid_from           DateTime
-  valid_until          DateTime?
-  gameday_from         Int?
-  season_from          Int?
-  division             String?
-  division_id          String?
-  league               String?
-  league_id            String?
-  tournament_name      String?
-  modifications        String[]
-  team_main_color      String?
-  team_secondary_color String?
-  team_slogan          String?
-  team_emoji           String?
-  stadium_id           String?
-  stadium_name         String?
-  stadium_nickname     String?
+  valid_from           DateTime  @db.Timestamp(6)
+  valid_until          DateTime? @db.Timestamp(6)
+  url_slug             String    @db.VarChar
+  stadium_id           String?   @default("") @db.VarChar(36)
+  team_abbreviation    String?   @default("") @db.VarChar(10)
+  team_main_color      String?   @default("") @db.VarChar(10)
+  team_secondary_color String?   @default("") @db.VarChar(10)
+  team_emoji           String?   @default("") @db.VarChar
+  team_slogan          String?   @default("") @db.VarChar
+  // deceased             Boolean   @default(false)
 
+  team_current_status String?
+  gameday_from        Int?
+  season_from         Int?
+  division            String?
+  division_id         String?
+  league              String?
+  league_id           String?
+  tournament_name     String?
+  modifications       String[]
+  stadium_name        String?
+  stadium_nickname    String?
+
+  PlayerBattingStatsGame        PlayerBattingStatsGame[]
   PlayerBattingStatsSeason      PlayerBattingStatsSeason[]
   PlayerBattingStatsPostseason  PlayerBattingStatsPostseason[]
+  PlayerPitchingStatsGame       PlayerPitchingStatsGame[]
   PlayerPitchingStatsSeason     PlayerPitchingStatsSeason[]
   PlayerPitchingStatsPostseason PlayerPitchingStatsPostseason[]
 
@@ -351,12 +361,55 @@ model CurrentTeamRoster {
 // Batting Stats
 
 // @View - Must be manually updated with every new Prisma introspection
+model PlayerBattingStatsGame {
+  game_id              String
+  player_id            String
+  player_name          String
+  team_id              String    @db.VarChar(36)
+  team_valid_from      DateTime  @db.Timestamp(6)
+  team_valid_until     DateTime? @db.Timestamp(6)
+  season               Int
+  day                  Int
+  batting_average      Float?
+  on_base_percentage   Float?
+  slugging             Float?
+  plate_appearances    Int
+  at_bats              Int
+  hits                 Int
+  walks                Int
+  singles              Int
+  doubles              Int
+  triples              Int
+  quadruples           Int
+  home_runs            Int
+  runs_batted_in       Float
+  strikeouts           Int
+  sacrifice_bunts      Int
+  sacrifice_flies      Int
+  at_bats_risp         Int
+  hits_risp            Int
+  batting_average_risp Float?
+  on_base_slugging     Float?
+  total_bases          Int
+  hit_by_pitches       Int
+  ground_outs          Int
+  flyouts              Int
+  gidp                 Int
+
+  runningStats PlayerRunningStatsGame?
+  team         Team                    @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
+
+  @@id(fields: [game_id, player_id, team_id])
+  @@map("batting_stats_player_single_game")
+}
+
+// @View - Must be manually updated with every new Prisma introspection
 model PlayerBattingStatsSeason {
   player_id            String
   player_name          String
-  team_id              String
-  team_valid_from      DateTime
-  team_valid_until     DateTime?
+  team_id              String    @db.VarChar(36)
+  team_valid_from      DateTime  @db.Timestamp(6)
+  team_valid_until     DateTime? @db.Timestamp(6)
   season               Int
   first_appearance     Int
   batting_average      Float?
@@ -436,9 +489,9 @@ model PlayerBattingStatsSeasonCombined {
 model PlayerBattingStatsPostseason {
   player_id            String
   player_name          String
-  team_id              String
-  team_valid_from      DateTime
-  team_valid_until     DateTime?
+  team_id              String    @db.VarChar(36)
+  team_valid_from      DateTime  @db.Timestamp(6)
+  team_valid_until     DateTime? @db.Timestamp(6)
   season               Int
   batting_average      Float?
   on_base_percentage   Float?
@@ -550,9 +603,9 @@ model PlayerBattingStatsPostseasonLifetime {
 
 // @View - Must be manually updated with every new Prisma introspection
 model TeamBattingStatsSeason {
-  team_id              String
-  team_valid_from      DateTime
-  team_valid_until     DateTime?
+  team_id              String    @db.VarChar(36)
+  team_valid_from      DateTime  @db.Timestamp(6)
+  team_valid_until     DateTime? @db.Timestamp(6)
   season               Int
   batting_average      Float?
   on_base_percentage   Float?
@@ -590,9 +643,9 @@ model TeamBattingStatsSeason {
 
 // @View - Must be manually updated with every new Prisma introspection
 model TeamBattingStatsPostseason {
-  team_id              String
-  team_valid_from      DateTime
-  team_valid_until     DateTime?
+  team_id              String    @db.VarChar(36)
+  team_valid_from      DateTime  @db.Timestamp(6)
+  team_valid_until     DateTime? @db.Timestamp(6)
   season               Int
   batting_average      Float?
   on_base_percentage   Float?
@@ -631,13 +684,53 @@ model TeamBattingStatsPostseason {
 // Pitching Stats
 
 // @View - Must be manually updated with every new Prisma introspection
+model PlayerPitchingStatsGame {
+  game_id           String
+  player_id         String
+  player_name       String
+  season            Int
+  day               Int
+  team_id           String    @db.VarChar(36)
+  team_valid_from   DateTime  @db.Timestamp(6)
+  team_valid_until  DateTime? @db.Timestamp(6)
+  wins              Int       @map("win")
+  losses            Int       @map("loss")
+  pitches_thrown    Int
+  top_of_inning     Boolean
+  batters_faced     Int
+  outs_recorded     Int
+  innings           Float
+  runs_allowed      Float
+  // shutouts            Int
+  // quality_starts      Int
+  strikeouts        Int
+  walks             Int
+  home_runs_allowed Int
+  hits_allowed      Int
+  hit_by_pitches    Float
+  // earned_run_average  Float
+  // walks_per_9         Float
+  // hits_per_9          Float
+  // strikeouts_per_9    Float
+  // home_runs_per_9     Float
+  // whip                Float
+  // strikeouts_per_walk Float
+  weather_id        Int
+
+  team Team @relation(fields: [team_id, team_valid_from], references: [team_id, valid_from])
+
+  @@id(fields: [game_id, player_id, team_id])
+  @@map("pitching_stats_all_appearances")
+}
+
+// @View - Must be manually updated with every new Prisma introspection
 model PlayerPitchingStatsSeason {
   player_id           String
   player_name         String
   season              Int
-  team_id             String
-  team_valid_from     DateTime
-  team_valid_until    DateTime?
+  team_id             String    @db.VarChar(36)
+  team_valid_from     DateTime  @db.Timestamp(6)
+  team_valid_until    DateTime? @db.Timestamp(6)
   games               Int
   wins                Int
   losses              Int
@@ -706,9 +799,9 @@ model PlayerPitchingStatsPostseason {
   player_id           String
   player_name         String
   season              Int
-  team_id             String
-  team_valid_from     DateTime
-  team_valid_until    DateTime?
+  team_id             String    @db.VarChar(36)
+  team_valid_from     DateTime  @db.Timestamp(6)
+  team_valid_until    DateTime? @db.Timestamp(6)
   games               Int
   wins                Int
   losses              Int
@@ -806,9 +899,9 @@ model PlayerPitchingStatsPostseasonLifetime {
 // @View - Must be manually updated with every new Prisma introspection
 model TeamPitchingStatsSeason {
   season              Int
-  team_id             String
-  team_valid_from     DateTime
-  team_valid_until    DateTime?
+  team_id             String    @db.VarChar(36)
+  team_valid_from     DateTime  @db.Timestamp(6)
+  team_valid_until    DateTime? @db.Timestamp(6)
   games               Int
   wins                Int
   losses              Int
@@ -842,9 +935,9 @@ model TeamPitchingStatsSeason {
 // @View - Must be manually updated with every new Prisma introspection
 model TeamPitchingStatsPostseason {
   season              Int
-  team_id             String
-  team_valid_from     DateTime
-  team_valid_until    DateTime?
+  team_id             String    @db.VarChar(36)
+  team_valid_from     DateTime  @db.Timestamp(6)
+  team_valid_until    DateTime? @db.Timestamp(6)
   games               Int
   wins                Int
   losses              Int
@@ -877,14 +970,35 @@ model TeamPitchingStatsPostseason {
 
 // Base Running Stats
 
+// // @View - Must be manually updated with every new Prisma introspection
+model PlayerRunningStatsGame {
+  game_id          String
+  player_id        String
+  player_name      String
+  team             String?
+  team_id          String    @db.VarChar(36)
+  team_valid_from  DateTime  @db.Timestamp(6)
+  team_valid_until DateTime? @db.Timestamp(6)
+  season           Int
+  day              Int
+  stolen_bases     Int
+  caught_stealing  Int
+  runs             Float
+
+  battingStats PlayerBattingStatsGame @relation(fields: [game_id, player_id, team_id], references: [game_id, player_id, team_id])
+
+  @@id(fields: [game_id, player_id, team_id])
+  @@map("running_stats_player_single_game")
+}
+
 // @View - Must be manually updated with every new Prisma introspection
 model PlayerRunningStatsSeason {
   player_id        String
   player_name      String
   team             String?
-  team_id          String
-  team_valid_from  DateTime?
-  team_valid_until DateTime?
+  team_id          String    @db.VarChar(36)
+  team_valid_from  DateTime  @db.Timestamp(6)
+  team_valid_until DateTime? @db.Timestamp(6)
   season           Int
   stolen_bases     Int
   caught_stealing  Int
@@ -916,9 +1030,9 @@ model PlayerRunningStatsPostseason {
   player_id        String
   player_name      String
   team             String?
-  team_id          String
-  team_valid_from  DateTime?
-  team_valid_until DateTime?
+  team_id          String    @db.VarChar(36)
+  team_valid_from  DateTime  @db.Timestamp(6)
+  team_valid_until DateTime? @db.Timestamp(6)
   season           Int
   stolen_bases     Int
   caught_stealing  Int
@@ -961,7 +1075,7 @@ model PlayerRunningStatsPostseasonLifetime {
 // @View - Must be manually updated with every new Prisma introspection
 model TeamRunningStatsSeason {
   team            String?
-  team_id         String
+  team_id         String  @db.VarChar(36)
   season          Int
   stolen_bases    Int
   caught_stealing Int
@@ -976,7 +1090,7 @@ model TeamRunningStatsSeason {
 // @View - Must be manually updated with every new Prisma introspection
 model TeamRunningStatsPostseason {
   team            String?
-  team_id         String
+  team_id         String  @db.VarChar(36)
   season          Int
   stolen_bases    Int
   caught_stealing Int
